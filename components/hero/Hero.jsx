@@ -32,7 +32,7 @@ export default function Hero() {
           <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Cyber Beaver Kft.</p>
 
           {/* SEO fő kulcsszó: "kiszervezett információbiztonsági felelős" → H1 + title */}
-          <h1 className="text-[clamp(1.6rem,7vw,4.5rem)] font-bold leading-[1.1] tracking-tight">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             <span className="whitespace-nowrap text-lime">
               <Bracket side="left" />
               Kiszervezett

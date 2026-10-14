@@ -13,6 +13,33 @@
   --color-lime: #d6f34b;
   --color-risk: #ff5c50;
   --font-sans: var(--font-figtree);
+
+  /* Tipográfia: alap 16px, major third (×1.25) skála. Csak ezeket a text-* osztályokat használd,
+     tetszőleges méret (text-[..], clamp) nem megengedett. */
+  --text-xs: 0.64rem; /* 10.24px */
+  --text-xs--line-height: 1.5;
+  --text-sm: 0.8rem; /* 12.8px */
+  --text-sm--line-height: 1.5;
+  --text-base: 1rem; /* 16px */
+  --text-base--line-height: 1.5;
+  --text-lg: 1.25rem; /* 20px */
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.5625rem; /* 25px */
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.953125rem; /* 31.25px */
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2.44140625rem; /* 39.06px */
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 3.0517578125rem; /* 48.83px */
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.814697265625rem; /* 61.04px */
+  --text-5xl--line-height: 1.1;
+  --text-6xl: 4.76837158203125rem; /* 76.29px */
+  --text-6xl--line-height: 1.05;
+}
+
+html {
+  font-size: 16px;
 }
 
 body {

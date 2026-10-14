@@ -16,7 +16,7 @@ const DIRS = [
   [0, 1],
   [0, -1],
 ];
-const MOVE_MS = 85; // ennyi idő alatt lép egy pöttyöt a kígyó
+const MOVE_MS = 121; // ennyi idő alatt lép egy pöttyöt a kígyó (85 → 30%-kal lassabb)
 const TAIL = 9; // kígyó hossza (pötty)
 const HEALED_STAY_MS = 3500; // meddig marad zölden egy meggyógyult pont, mielőtt eltűnik
 const SPAWN_MS = 2200; // ilyen gyakran nézi, kell-e új kockázat-klaszter
