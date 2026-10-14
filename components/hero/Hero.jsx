@@ -28,7 +28,7 @@ export default function Hero() {
       />
 
       <div className="mx-auto w-full max-w-5xl px-4 py-24 text-center">
-        <div data-hero-content className="mx-auto w-fit max-w-full">
+        <div className="mx-auto w-fit max-w-full">
           <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Cyber Beaver Kft.</p>
 
           <h1 className="text-[clamp(1.6rem,7vw,4.75rem)] font-bold leading-[1.1] tracking-tight">

@@ -10,15 +10,6 @@ const RISK = [255, 92, 80];
 const OK = [214, 243, 75];
 const BASE = [255, 255, 255];
 
-const LABELS = [
-  "Hiányzó GAP-elemzés",
-  "Beszállítói kockázat",
-  "Elavult szabályzat",
-  "Nincs incidenskezelési terv",
-  "Képzetlen munkatársak",
-  "DORA hiányosság",
-];
-
 const DIRS = [
   [1, 0],
   [-1, 0],
@@ -43,7 +34,6 @@ export default function RiskGrid() {
     const section = canvas.parentElement;
     const ctx = canvas.getContext("2d");
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const fontFamily = getComputedStyle(canvas).fontFamily;
 
     let w = 0;
     let h = 0;
@@ -51,9 +41,7 @@ export default function RiskGrid() {
     let cols = 0;
     let rows = 0;
     let cells = [];
-    let labels = [];
     let snakes = [];
-    let content = null;
     let mouse = null;
     let lastTime = 0;
     let lastSpawn = 0;
@@ -71,8 +59,6 @@ export default function RiskGrid() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.font = `500 13px ${fontFamily}`;
-      content = contentBox();
 
       gap = small() ? 24 : 30;
       cols = Math.ceil(w / gap);
@@ -86,7 +72,6 @@ export default function RiskGrid() {
         }
       }
 
-      labels = [];
       const clusters = small() ? 4 : 7;
       for (let i = 0; i < clusters; i++) spawnCluster(i % 2 === 0);
       for (const cell of cells) if (Math.random() < 0.01) cell.target = rand(0.5, 1);
@@ -98,80 +83,19 @@ export default function RiskGrid() {
 
     // ---- Kockázatok ------------------------------------------------------------------------
 
+    // A klaszterek a szélekre kerülnek, a középső (szöveges) sáv szabadabb marad.
     function spawnCluster(left = Math.random() < 0.5) {
-      const maxLabels = small() ? 2 : 5;
-      const used = new Set(labels.map((l) => l.text));
-      const free = LABELS.filter((l) => !used.has(l));
-      const text = labels.length < maxLabels && free.length ? free[randInt(0, free.length - 1)] : null;
-
-      // A klaszterek a szélekre kerülnek; a feliratosak a szöveges blokkot is elkerülik.
-      let cx = 0;
-      let cy = 0;
-      let box = null;
-      for (let attempt = 0; attempt < 40; attempt++) {
-        cx = left ? rand(0.04, 0.3) * w : rand(0.7, 0.96) * w;
-        cy = rand(0.08, 0.92) * h;
-        if (!text) break;
-        box = labelBox(cx, cy, text, left);
-        if (labelFits(box)) break;
-      }
-
+      const cx = left ? rand(0.04, 0.3) * w : rand(0.7, 0.96) * w;
+      const cy = rand(0.08, 0.92) * h;
       const radius = rand(1.5, 3.5) * gap;
       for (const cell of cells) {
         if (cell.target > 0 || cell.risk > 0.02) continue;
         if (Math.hypot(cell.x - cx, cell.y - cy) < radius && Math.random() < 0.6) cell.target = rand(0.45, 1);
       }
-      if (text) {
-        const anchor = nearest(cx, cy);
-        const anchorBox = labelBox(anchor.x, anchor.y, text, left);
-        if (labelFits(anchorBox)) {
-          anchor.target = 1;
-          anchor.ok = 0;
-          anchor.healedAt = 0;
-          labels.push({ cell: anchor, text, left, box: anchorBox });
-        }
-      }
     }
 
     function heal(cell, now) {
       if (cell.target > 0 && !cell.healedAt) cell.healedAt = now;
-    }
-
-    function labelBox(x, y, text, left) {
-      const tw = ctx.measureText(text).width + 16;
-      return { x1: left ? x : x - tw, x2: left ? x + tw : x, y1: y - 12, y2: y + 12 };
-    }
-
-    // A szöveges tartalom doboza a section-höz képest (kicsit kitágítva).
-    function contentBox() {
-      const el = section.querySelector("[data-hero-content]");
-      if (!el) return null;
-      const s = section.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      return { x1: r.left - s.left - 16, x2: r.right - s.left + 16, y1: r.top - s.top - 16, y2: r.bottom - s.top + 16 };
-    }
-
-    // Felirat nem lóghat a szövegbe, ki a képből, és nem fedhet másik feliratot.
-    function labelFits(box) {
-      if (overlaps(box, content) || box.x1 < 4 || box.x2 > w - 4) return false;
-      return !labels.some((l) => overlaps(box, { x1: l.box.x1, x2: l.box.x2, y1: l.box.y1 - 20, y2: l.box.y2 + 20 }));
-    }
-
-    function overlaps(a, b) {
-      return b && a.x1 < b.x2 && a.x2 > b.x1 && a.y1 < b.y2 && a.y2 > b.y1;
-    }
-
-    function nearest(x, y) {
-      let best = cells[0];
-      let bd = Infinity;
-      for (const cell of cells) {
-        const d = (cell.x - x) ** 2 + (cell.y - y) ** 2;
-        if (d < bd) {
-          bd = d;
-          best = cell;
-        }
-      }
-      return best;
     }
 
     // ---- Kígyók ----------------------------------------------------------------------------
@@ -264,7 +188,6 @@ export default function RiskGrid() {
         }
         if (cell.target > 0 && !cell.healedAt) active++;
       }
-      labels = labels.filter((l) => l.cell.target > 0 || l.cell.risk > 0.02);
 
       if (now - lastSpawn > SPAWN_MS) {
         lastSpawn = now;
@@ -306,18 +229,6 @@ export default function RiskGrid() {
           ctx.fillStyle = `rgba(${OK[0]},${OK[1]},${OK[2]},${0.2 + 0.8 * a})`;
           ctx.fillRect(cell.x - s / 2, cell.y - s / 2, s, s);
         });
-      }
-
-      ctx.font = `500 13px ${fontFamily}`;
-      ctx.textBaseline = "middle";
-      for (const { cell, text, left } of labels) {
-        if (cell.risk < 0.1) continue;
-        // Gyógyuláskor a felirat egyszerűen elhalványul.
-        const alpha = 0.7 * cell.risk * (1 - cell.ok);
-        if (alpha < 0.02) continue;
-        ctx.fillStyle = `rgba(${BASE[0]},${BASE[1]},${BASE[2]},${alpha})`;
-        ctx.textAlign = left ? "left" : "right";
-        ctx.fillText(text, cell.x + (left ? 12 : -12), cell.y);
       }
     }
 
