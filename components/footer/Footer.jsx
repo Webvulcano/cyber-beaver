@@ -1,6 +1,8 @@
+import Image from "next/image";
+
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja) + világító lime körív,
 // alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
-// pontrács (a hero és a footer keretezi az oldalt); a körív alatt lime derengés → petrol-deep.
+// pontrács (a hero és a footer keretezi az oldalt); a körív alatt egyszínű petrol-deep. Flat: nincs glow.
 
 const EMAIL = "agardyb@protonmail.com";
 const PHONE = { display: "06 30 239 24 75", href: "tel:+36302392475" };
@@ -72,38 +74,18 @@ function PhoneIcon() {
   );
 }
 
-// Körív: a vonal a széleken elhalványul (vízszintes gradiens), alatta kitöltés, ami a lenti
-// szekció háttérszínébe fut. preserveAspectRatio="none" + non-scaling-stroke → bármilyen szélességen
-// egyenletes vonalvastagság.
+// Körív (flat): egyszínű lime vonal, alatta egyszínű petrol-deep kitöltés — nincs glow, nincs átmenet.
+// preserveAspectRatio="none" + non-scaling-stroke → bármilyen szélességen egyenletes vonalvastagság.
 function Arc() {
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 1440 240"
-      preserveAspectRatio="none"
-      className="block h-24 w-full md:h-40"
-    >
-      <defs>
-        <linearGradient id="arc-stroke" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0" stopColor="#d6f34b" stopOpacity="0" />
-          <stop offset="0.25" stopColor="#d6f34b" />
-          <stop offset="0.75" stopColor="#d6f34b" />
-          <stop offset="1" stopColor="#d6f34b" stopOpacity="0" />
-        </linearGradient>
-        {/* derengés a vonal alatt: petrol-deep + 10% lime → lefelé tiszta petrol-deep */}
-        <linearGradient id="arc-fill" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="240">
-          <stop offset="0" stopColor="#1d4946" />
-          <stop offset="1" stopColor="#083645" />
-        </linearGradient>
-      </defs>
-      <path d="M0 230 C 360 20, 1080 20, 1440 230 L1440 240 L0 240 Z" fill="url(#arc-fill)" />
+    <svg aria-hidden="true" viewBox="0 0 1440 240" preserveAspectRatio="none" className="block h-24 w-full md:h-40">
+      <path d="M0 230 C 360 20, 1080 20, 1440 230 L1440 240 L0 240 Z" className="fill-petrol-deep" />
       <path
         d="M0 230 C 360 20, 1080 20, 1440 230"
         fill="none"
-        stroke="url(#arc-stroke)"
+        className="stroke-lime"
         strokeWidth="3"
         vectorEffect="non-scaling-stroke"
-        style={{ filter: "drop-shadow(0 0 10px rgba(214,243,75,0.7))" }}
       />
     </svg>
   );
@@ -120,8 +102,8 @@ export default function Footer() {
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Beszéljünk a cégedről.</h2>
         <p className="mt-6 text-lg text-white/70">Egy rövid beszélgetésből kiderül, miben tudok segíteni.</p>
 
-        {/* világító e-mail pill */}
-        <div className="mx-auto mt-10 flex w-full max-w-md items-center justify-between gap-3 rounded-full border border-lime/70 bg-lime/10 p-1.5 pl-5 shadow-[0_0_40px_rgba(214,243,75,0.25)] sm:pl-6">
+        {/* e-mail pill */}
+        <div className="mx-auto mt-10 flex w-full max-w-md items-center justify-between gap-3 rounded-full border-2 border-lime bg-petrol-deep p-1.5 pl-5 sm:pl-6">
           <span className="min-w-0 break-all text-sm text-white/80 sm:text-base">{EMAIL}</span>
           <a
             href={`mailto:${EMAIL}`}
@@ -141,6 +123,8 @@ export default function Footer() {
       <Arc />
 
       <div className="-mt-px bg-petrol-deep pb-16 text-center">
+        {/* logo-mark-white.png: a public/logo.jpg hódfeje fehérre, átlátszó háttérrel (felirat nélkül) */}
+        <Image src="/logo-mark-white.png" alt="" width={579} height={516} className="mx-auto mb-6 h-20 w-auto" />
         <p className="text-2xl tracking-wide">
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
