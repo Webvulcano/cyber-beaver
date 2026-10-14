@@ -47,18 +47,13 @@ export default function Hero() {
             gyorsaságával és közvetlenségével.
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-10 flex justify-center">
+            {/* #kapcsolat: a lenti Kapcsolat szekció (még nincs megépítve) */}
             <a
-              href="tel:+36302392475"
-              className="w-full rounded-full bg-lime px-8 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
+              href="#kapcsolat"
+              className="w-full rounded-full bg-lime px-10 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
             >
-              Hívj: 06 30 239 24 75
-            </a>
-            <a
-              href="mailto:agardyb@protonmail.com"
-              className="w-full rounded-full border-2 border-lime px-8 py-[14px] font-semibold text-lime transition hover:bg-lime/10 sm:w-auto"
-            >
-              Írj e-mailt
+              Kapcsolat
             </a>
           </div>
 
