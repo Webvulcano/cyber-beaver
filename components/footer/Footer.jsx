@@ -100,7 +100,7 @@ export default function Footer() {
 
       <Arc />
 
-      <div className="bg-gradient-to-b from-arc to-night pb-20 text-center">
+      <div className="-mt-px bg-gradient-to-b from-arc to-night pb-20 text-center">
         <p className="text-2xl tracking-wide">
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
@@ -122,6 +122,9 @@ export default function Footer() {
             </a>
           </li>
         </ul>
+        <p className="mx-auto mt-10 max-w-xs px-4 text-sm italic text-white/40 sm:max-w-none">
+          „Mert csak a legokosabb hód tudja, merre dől a fa.”
+        </p>
       </div>
     </footer>
   );
