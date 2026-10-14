@@ -13,6 +13,8 @@
   --color-lime: #d6f34b;
   --color-risk: #ff5c50;
   --color-mist: #f2f7f6;
+  --color-night: #052530;
+  --color-arc: #0a3c4c;
   --font-sans: var(--font-figtree);
 
   /* Tipográfia: alap 16px, major third (×1.25) skála. Csak ezeket a text-* osztályokat használd,
@@ -52,6 +54,12 @@
 
 html {
   font-size: 16px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

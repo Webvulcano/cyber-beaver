@@ -48,7 +48,7 @@ export default function Hero() {
           </p>
 
           <div className="mt-10 flex justify-center">
-            {/* #kapcsolat: a lenti Kapcsolat szekció (még nincs megépítve) */}
+            {/* #kapcsolat: a footer tetején lévő Kapcsolat rész */}
             <a
               href="#kapcsolat"
               className="w-full rounded-full bg-lime px-10 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
