@@ -2,27 +2,37 @@
 
 import { useEffect, useRef } from "react";
 
-// Kockázat-szkenner háttér: pontrács, piros "kockázat" klaszterekkel. Egy hódos szkenner-vonal
-// balról jobbra végigmegy, mögötte a kockázatok zöldre (lime) váltanak. Az egér körül is "gyógyul".
+// Kockázat-szkenner háttér: pontrács piros "kockázat" klaszterekkel. 3-4 lime "kígyó" halad a
+// pöttyök mentén, a kockázatok felé tart, és amin átmegy, az zöldre (lime) vált. A meggyógyult
+// pontok egy idő után eltűnnek, máshol újak jelennek meg. Az egér körül is "gyógyul".
 
 const RISK = [255, 92, 80];
 const OK = [214, 243, 75];
 const BASE = [255, 255, 255];
 
-const RISK_LABELS = [
-  "Hiányzó GAP-elemzés",
-  "Beszállítói kockázat",
-  "Elavult szabályzat",
-  "Nincs incidenskezelési terv",
-  "Képzetlen munkatársak",
-  "DORA hiányosság",
+const LABELS = [
+  ["Hiányzó GAP-elemzés", "NIS2 ✓"],
+  ["Beszállítói kockázat", "TPRM ✓"],
+  ["Elavult szabályzat", "Szabályzat ✓"],
+  ["Nincs incidenskezelési terv", "Incidenskezelés ✓"],
+  ["Képzetlen munkatársak", "Tudatosság ✓"],
+  ["DORA hiányosság", "DORA ✓"],
 ];
-const FIX_LABELS = ["NIS2 ✓", "TPRM ✓", "Szabályzat ✓", "Incidenskezelés ✓", "Tudatosság ✓", "DORA ✓"];
 
-const PHASE = { show: 1800, scan: 5200, hold: 2600, reset: 1200 };
-const HEAL_RADIUS = 90;
+const DIRS = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+];
+const MOVE_MS = 85; // ennyi idő alatt lép egy pöttyöt a kígyó
+const TAIL = 9; // kígyó hossza (pötty)
+const HEALED_STAY_MS = 3500; // meddig marad zölden egy meggyógyult pont, mielőtt eltűnik
+const SPAWN_MS = 2200; // ilyen gyakran nézi, kell-e új kockázat-klaszter
+const HEAL_RADIUS = 90; // egér
 
 const rand = (a, b) => a + Math.random() * (b - a);
+const randInt = (a, b) => Math.floor(rand(a, b + 1));
 const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
 
 export default function RiskGrid() {
@@ -38,14 +48,20 @@ export default function RiskGrid() {
     let w = 0;
     let h = 0;
     let gap = 30;
+    let cols = 0;
+    let rows = 0;
     let cells = [];
     let labels = [];
-    let phase = "show";
-    let phaseStart = performance.now();
-    let lineX = -100;
+    let snakes = [];
+    let content = null;
     let mouse = null;
+    let lastTime = 0;
+    let lastSpawn = 0;
     let raf = 0;
     let visible = true;
+
+    const at = (c, r) => cells[r * cols + c];
+    const small = () => w < 640;
 
     function build() {
       const rect = section.getBoundingClientRect();
@@ -55,63 +71,75 @@ export default function RiskGrid() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.font = `500 13px ${fontFamily}`;
+      content = contentBox();
 
-      gap = w < 640 ? 24 : 30;
-      const cols = Math.ceil(w / gap);
-      const rows = Math.ceil(h / gap);
+      gap = small() ? 24 : 30;
+      cols = Math.ceil(w / gap);
+      rows = Math.ceil(h / gap);
       const offX = (w - (cols - 1) * gap) / 2;
       const offY = (h - (rows - 1) * gap) / 2;
       cells = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          cells.push({ x: offX + c * gap, y: offY + r * gap, risk: 0, target: 0, ok: 0, glow: 0 });
+          cells.push({ c, r, x: offX + c * gap, y: offY + r * gap, risk: 0, target: 0, ok: 0, healedAt: 0 });
         }
       }
-      seedRisks();
+
+      labels = [];
+      const clusters = small() ? 4 : 7;
+      for (let i = 0; i < clusters; i++) spawnCluster(i % 2 === 0);
+      for (const cell of cells) if (Math.random() < 0.01) cell.target = rand(0.5, 1);
+
+      snakes = [];
+      const count = small() ? 3 : 4;
+      for (let i = 0; i < count; i++) snakes.push(newSnake());
     }
 
-    function seedRisks() {
+    // ---- Kockázatok ------------------------------------------------------------------------
+
+    function spawnCluster(left = Math.random() < 0.5) {
+      const maxLabels = small() ? 2 : 5;
+      const used = new Set(labels.map((l) => l.text[0]));
+      const free = LABELS.filter((l) => !used.has(l[0]));
+      const text = labels.length < maxLabels && free.length ? free[randInt(0, free.length - 1)] : null;
+
+      // A klaszterek a szélekre kerülnek; a feliratosak a szöveges blokkot is elkerülik.
+      let cx = 0;
+      let cy = 0;
+      let box = null;
+      for (let attempt = 0; attempt < 40; attempt++) {
+        cx = left ? rand(0.04, 0.3) * w : rand(0.7, 0.96) * w;
+        cy = rand(0.08, 0.92) * h;
+        if (!text) break;
+        box = labelBox(cx, cy, text, left);
+        if (labelFits(box)) break;
+      }
+
+      const radius = rand(1.5, 3.5) * gap;
       for (const cell of cells) {
-        cell.target = 0;
-        cell.ok = 0;
+        if (cell.target > 0 || cell.risk > 0.02) continue;
+        if (Math.hypot(cell.x - cx, cell.y - cy) < radius && Math.random() < 0.6) cell.target = rand(0.45, 1);
       }
-      labels = [];
-      const clusters = w < 640 ? 4 : 7;
-      const labelCount = w < 640 ? 2 : 5;
-      const order = [...RISK_LABELS.keys()].sort(() => Math.random() - 0.5);
-
-      const content = contentBox();
-      ctx.font = `500 13px ${fontFamily}`;
-
-      for (let i = 0; i < clusters; i++) {
-        // A klaszterek a szélekre kerülnek; a feliratos klaszterek a szöveges blokkot is elkerülik.
-        const left = i % 2 === 0;
-        const labelText = i < labelCount ? RISK_LABELS[order[i]] : null;
-        let cx = 0;
-        let cy = 0;
-        for (let attempt = 0; attempt < 40; attempt++) {
-          cx = left ? rand(0.04, 0.3) * w : rand(0.7, 0.96) * w;
-          cy = rand(0.08, 0.92) * h;
-          if (!labelText) break;
-          const tw = Math.max(ctx.measureText(labelText).width, ctx.measureText(FIX_LABELS[order[i]]).width) + 16;
-          const box = { x1: left ? cx : cx - tw, x2: left ? cx + tw : cx, y1: cy - 12, y2: cy + 12 };
-          if (!overlaps(box, content) && box.x1 > 4 && box.x2 < w - 4) break;
-        }
-        const radius = rand(1.5, 3.5) * gap;
-        for (const cell of cells) {
-          const d = Math.hypot(cell.x - cx, cell.y - cy);
-          if (d < radius && Math.random() < 0.6) cell.target = rand(0.45, 1);
-        }
-        if (i < labelCount) {
-          const anchor = nearest(cx, cy);
+      if (text) {
+        const anchor = nearest(cx, cy);
+        const anchorBox = labelBox(anchor.x, anchor.y, text, left);
+        if (labelFits(anchorBox)) {
           anchor.target = 1;
-          const tw = ctx.measureText(labelText).width + 16;
-          const box = { x1: left ? anchor.x : anchor.x - tw, x2: left ? anchor.x + tw : anchor.x, y1: anchor.y - 12, y2: anchor.y + 12 };
-          if (!overlaps(box, content)) labels.push({ cell: anchor, risk: labelText, fix: FIX_LABELS[order[i]], left });
+          anchor.ok = 0;
+          anchor.healedAt = 0;
+          labels.push({ cell: anchor, text, left, box: anchorBox });
         }
       }
-      // Szórt egyedi kockázatok
-      for (const cell of cells) if (Math.random() < 0.012) cell.target = rand(0.5, 1);
+    }
+
+    function heal(cell, now) {
+      if (cell.target > 0 && !cell.healedAt) cell.healedAt = now;
+    }
+
+    function labelBox(x, y, text, left) {
+      const tw = Math.max(ctx.measureText(text[0]).width, ctx.measureText(text[1]).width) + 16;
+      return { x1: left ? x : x - tw, x2: left ? x + tw : x, y1: y - 12, y2: y + 12 };
     }
 
     // A szöveges tartalom doboza a section-höz képest (kicsit kitágítva).
@@ -121,6 +149,12 @@ export default function RiskGrid() {
       const s = section.getBoundingClientRect();
       const r = el.getBoundingClientRect();
       return { x1: r.left - s.left - 16, x2: r.right - s.left + 16, y1: r.top - s.top - 16, y2: r.bottom - s.top + 16 };
+    }
+
+    // Felirat nem lóghat a szövegbe, ki a képből, és nem fedhet másik feliratot.
+    function labelFits(box) {
+      if (overlaps(box, content) || box.x1 < 4 || box.x2 > w - 4) return false;
+      return !labels.some((l) => overlaps(box, { x1: l.box.x1, x2: l.box.x2, y1: l.box.y1 - 20, y2: l.box.y2 + 20 }));
     }
 
     function overlaps(a, b) {
@@ -140,113 +174,150 @@ export default function RiskGrid() {
       return best;
     }
 
-    function step(now) {
-      const t = now - phaseStart;
-      if (phase === "show" && t > PHASE.show) next("scan", now);
-      else if (phase === "scan") {
-        lineX = -60 + (t / PHASE.scan) * (w + 120);
-        if (t > PHASE.scan) next("hold", now);
-      } else if (phase === "hold" && t > PHASE.hold) next("reset", now);
-      else if (phase === "reset" && t > PHASE.reset) {
-        seedRisks();
-        lineX = -100;
-        next("show", now);
+    // ---- Kígyók ----------------------------------------------------------------------------
+
+    function newSnake() {
+      const c = randInt(0, cols - 1);
+      const r = randInt(0, rows - 1);
+      return { c, r, dir: DIRS[randInt(0, 3)], trail: [{ c, r }], target: null, retarget: 0, wait: rand(0, MOVE_MS) };
+    }
+
+    // Legközelebbi még nem gyógyult kockázat (kicsit véletlenszerűen, hogy ne mind ugyanoda menjen).
+    function pickTarget(snake) {
+      let best = null;
+      let bd = Infinity;
+      for (const cell of cells) {
+        if (cell.target <= 0 || cell.healedAt) continue;
+        const d = Math.abs(cell.c - snake.c) + Math.abs(cell.r - snake.r) + rand(0, 12);
+        if (d < bd) {
+          bd = d;
+          best = cell;
+        }
+      }
+      return best;
+    }
+
+    function moveSnake(snake, now) {
+      if (now > snake.retarget || (snake.target && snake.target.healedAt)) {
+        snake.target = pickTarget(snake);
+        snake.retarget = now + rand(1500, 3000);
       }
 
-      for (const cell of cells) {
-        const fading = phase === "reset";
-        cell.risk += ((fading ? 0 : cell.target) - cell.risk) * 0.06;
+      const inside = ([dc, dr]) => {
+        const c = snake.c + dc;
+        const r = snake.r + dr;
+        return c >= 0 && c < cols && r >= 0 && r < rows;
+      };
+      const options = DIRS.filter((d) => !(d[0] === -snake.dir[0] && d[1] === -snake.dir[1]) && inside(d));
 
-        let healTarget = phase === "hold" || (phase === "scan" && cell.x < lineX) || cell.ok > 0.5 ? 1 : 0;
-        if (mouse && !fading && Math.hypot(cell.x - mouse.x, cell.y - mouse.y) < HEAL_RADIUS) healTarget = 1;
-        cell.ok += (healTarget - cell.ok) * 0.12;
+      let dir = snake.dir;
+      const t = snake.target;
+      const toward = t
+        ? options.filter(
+            ([dc, dr]) => (dc !== 0 && dc === Math.sign(t.c - snake.c)) || (dr !== 0 && dr === Math.sign(t.r - snake.r))
+          )
+        : [];
+      if (toward.length && Math.random() < 0.7) dir = toward[randInt(0, toward.length - 1)];
+      else if (!options.includes(snake.dir) || Math.random() < 0.25) dir = options[randInt(0, options.length - 1)];
 
-        // Világító csóva közvetlenül a szkenner-vonal mögött
-        const behind = lineX - cell.x;
-        const trail = phase === "scan" && behind > 0 ? Math.max(0, 1 - behind / 240) : 0;
-        cell.glow += (trail - cell.glow) * 0.25;
+      snake.dir = dir;
+      snake.c += dir[0];
+      snake.r += dir[1];
+      snake.trail.unshift({ c: snake.c, r: snake.r });
+      if (snake.trail.length > TAIL) snake.trail.pop();
+
+      // A fej és közvetlen szomszédai gyógyulnak.
+      for (const [dc, dr] of [[0, 0], ...DIRS]) {
+        const c = snake.c + dc;
+        const r = snake.r + dr;
+        if (c >= 0 && c < cols && r >= 0 && r < rows) heal(at(c, r), now);
       }
     }
 
-    function next(p, now) {
-      phase = p;
-      phaseStart = now;
+    // ---- Ciklus ----------------------------------------------------------------------------
+
+    function step(now) {
+      const dt = Math.min(100, now - (lastTime || now));
+      lastTime = now;
+
+      for (const snake of snakes) {
+        snake.wait -= dt;
+        while (snake.wait <= 0) {
+          moveSnake(snake, now);
+          snake.wait += MOVE_MS;
+        }
+      }
+
+      if (mouse) {
+        for (const cell of cells) if (Math.hypot(cell.x - mouse.x, cell.y - mouse.y) < HEAL_RADIUS) heal(cell, now);
+      }
+
+      let active = 0;
+      for (const cell of cells) {
+        if (cell.healedAt && now - cell.healedAt > HEALED_STAY_MS) cell.target = 0;
+        cell.risk += (cell.target - cell.risk) * 0.06;
+        cell.ok += ((cell.healedAt ? 1 : 0) - cell.ok) * 0.12;
+        if (cell.target === 0 && cell.risk < 0.02 && cell.healedAt) {
+          cell.risk = 0;
+          cell.ok = 0;
+          cell.healedAt = 0;
+        }
+        if (cell.target > 0 && !cell.healedAt) active++;
+      }
+      labels = labels.filter((l) => l.cell.target > 0 || l.cell.risk > 0.02);
+
+      if (now - lastSpawn > SPAWN_MS) {
+        lastSpawn = now;
+        if (active < cells.length * 0.025) spawnCluster();
+      }
     }
 
     function draw() {
       ctx.clearRect(0, 0, w, h);
-      const size = gap < 30 ? 3 : 4;
+      const size = small() ? 3 : 4;
 
       for (const cell of cells) {
-        let color;
-        let alpha;
+        let color = BASE;
+        let alpha = 0.1;
         if (cell.risk > 0.02) {
           color = mix(RISK, OK, cell.ok);
           alpha = 0.25 + 0.75 * cell.risk;
-        } else {
-          color = mix(BASE, OK, Math.min(1, cell.glow));
-          alpha = 0.1 + 0.5 * cell.glow;
         }
         ctx.fillStyle = `rgba(${color[0]},${color[1]},${color[2]},${alpha})`;
         ctx.fillRect(cell.x - size / 2, cell.y - size / 2, size, size);
       }
 
-      ctx.font = `500 13px ${fontFamily}`;
-      ctx.textBaseline = "middle";
-      for (const label of labels) {
-        const { cell } = label;
-        if (cell.risk < 0.1) continue;
-        const fixed = cell.ok > 0.5;
-        const text = fixed ? label.fix : label.risk;
-        const c = fixed ? OK : [255, 255, 255];
-        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(fixed ? 0.95 : 0.7) * cell.risk})`;
-        ctx.textAlign = label.left ? "left" : "right";
-        ctx.fillText(text, cell.x + (label.left ? 12 : -12), cell.y);
+      for (const snake of snakes) {
+        // halvány összekötő vonal a pöttyök között → "kígyó" hatás
+        ctx.lineWidth = 1.5;
+        for (let i = 1; i < snake.trail.length; i++) {
+          const a = at(snake.trail[i - 1].c, snake.trail[i - 1].r);
+          const b = at(snake.trail[i].c, snake.trail[i].r);
+          ctx.strokeStyle = `rgba(${OK[0]},${OK[1]},${OK[2]},${0.35 * (1 - i / TAIL)})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+        snake.trail.forEach(({ c, r }, i) => {
+          const cell = at(c, r);
+          const a = 1 - i / TAIL;
+          const s = i === 0 ? size + 3 : size + 1;
+          ctx.fillStyle = `rgba(${OK[0]},${OK[1]},${OK[2]},${0.2 + 0.8 * a})`;
+          ctx.fillRect(cell.x - s / 2, cell.y - s / 2, s, s);
+        });
       }
 
-      if (phase === "scan" && lineX > -40 && lineX < w + 40) drawScanner(lineX);
-    }
-
-    function drawScanner(x) {
-      const grad = ctx.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, "rgba(214,243,75,0)");
-      grad.addColorStop(0.15, "rgba(214,243,75,0.55)");
-      grad.addColorStop(0.85, "rgba(214,243,75,0.55)");
-      grad.addColorStop(1, "rgba(214,243,75,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(x - 1, 0, 2, h);
-      drawBeaver(x, Math.min(110, h * 0.14));
-    }
-
-    // Egyszerű flat hódfej: lime korong, petrol arc, két nagy fog.
-    function drawBeaver(x, y) {
-      const petrol = "#0b4456";
-      ctx.fillStyle = "#d6f34b";
-      ctx.beginPath();
-      ctx.arc(x, y, 18, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = petrol;
-      ctx.beginPath();
-      ctx.arc(x - 8, y - 8, 3.5, 0, Math.PI * 2); // fülek
-      ctx.arc(x + 8, y - 8, 3.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(x, y + 1, 9.5, 0, Math.PI * 2); // fej
-      ctx.fill();
-
-      ctx.fillStyle = "#d6f34b";
-      ctx.beginPath();
-      ctx.arc(x - 3.5, y - 1.5, 1.4, 0, Math.PI * 2); // szemek
-      ctx.arc(x + 3.5, y - 1.5, 1.4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(x, y + 2.5, 2.2, 1.5, 0, 0, Math.PI * 2); // orr
-      ctx.fill();
-
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(x - 2.6, y + 5, 2.4, 4); // fogak
-      ctx.fillRect(x + 0.2, y + 5, 2.4, 4);
+      ctx.font = `500 13px ${fontFamily}`;
+      ctx.textBaseline = "middle";
+      for (const { cell, text, left } of labels) {
+        if (cell.risk < 0.1) continue;
+        const fixed = cell.ok > 0.5;
+        const c = fixed ? OK : BASE;
+        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(fixed ? 0.95 : 0.7) * cell.risk})`;
+        ctx.textAlign = left ? "left" : "right";
+        ctx.fillText(fixed ? text[1] : text[0], cell.x + (left ? 12 : -12), cell.y);
+      }
     }
 
     function loop(now) {
@@ -257,13 +328,15 @@ export default function RiskGrid() {
 
     function start() {
       cancelAnimationFrame(raf);
+      lastTime = 0;
       raf = requestAnimationFrame(loop);
     }
 
     build();
 
     if (reduced) {
-      // Statikus kép: félig "megjavított" állapot, animáció nélkül.
+      // Statikus kép, kígyók nélkül: a bal oldali kockázatok már "megjavítva".
+      snakes = [];
       for (const cell of cells) {
         cell.risk = cell.target;
         cell.ok = cell.x < w * 0.5 ? 1 : 0;
