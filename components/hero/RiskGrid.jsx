@@ -11,12 +11,12 @@ const OK = [214, 243, 75];
 const BASE = [255, 255, 255];
 
 const LABELS = [
-  ["Hiányzó GAP-elemzés", "NIS2 ✓"],
-  ["Beszállítói kockázat", "TPRM ✓"],
-  ["Elavult szabályzat", "Szabályzat ✓"],
-  ["Nincs incidenskezelési terv", "Incidenskezelés ✓"],
-  ["Képzetlen munkatársak", "Tudatosság ✓"],
-  ["DORA hiányosság", "DORA ✓"],
+  "Hiányzó GAP-elemzés",
+  "Beszállítói kockázat",
+  "Elavult szabályzat",
+  "Nincs incidenskezelési terv",
+  "Képzetlen munkatársak",
+  "DORA hiányosság",
 ];
 
 const DIRS = [
@@ -100,8 +100,8 @@ export default function RiskGrid() {
 
     function spawnCluster(left = Math.random() < 0.5) {
       const maxLabels = small() ? 2 : 5;
-      const used = new Set(labels.map((l) => l.text[0]));
-      const free = LABELS.filter((l) => !used.has(l[0]));
+      const used = new Set(labels.map((l) => l.text));
+      const free = LABELS.filter((l) => !used.has(l));
       const text = labels.length < maxLabels && free.length ? free[randInt(0, free.length - 1)] : null;
 
       // A klaszterek a szélekre kerülnek; a feliratosak a szöveges blokkot is elkerülik.
@@ -138,7 +138,7 @@ export default function RiskGrid() {
     }
 
     function labelBox(x, y, text, left) {
-      const tw = Math.max(ctx.measureText(text[0]).width, ctx.measureText(text[1]).width) + 16;
+      const tw = ctx.measureText(text).width + 16;
       return { x1: left ? x : x - tw, x2: left ? x + tw : x, y1: y - 12, y2: y + 12 };
     }
 
@@ -312,11 +312,12 @@ export default function RiskGrid() {
       ctx.textBaseline = "middle";
       for (const { cell, text, left } of labels) {
         if (cell.risk < 0.1) continue;
-        const fixed = cell.ok > 0.5;
-        const c = fixed ? OK : BASE;
-        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(fixed ? 0.95 : 0.7) * cell.risk})`;
+        // Gyógyuláskor a felirat egyszerűen elhalványul.
+        const alpha = 0.7 * cell.risk * (1 - cell.ok);
+        if (alpha < 0.02) continue;
+        ctx.fillStyle = `rgba(${BASE[0]},${BASE[1]},${BASE[2]},${alpha})`;
         ctx.textAlign = left ? "left" : "right";
-        ctx.fillText(fixed ? text[1] : text[0], cell.x + (left ? 12 : -12), cell.y);
+        ctx.fillText(text, cell.x + (left ? 12 : -12), cell.y);
       }
     }
 
