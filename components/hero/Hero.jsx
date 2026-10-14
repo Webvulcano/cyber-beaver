@@ -67,8 +67,6 @@ export default function Hero() {
               <li key={s}>{s}</li>
             ))}
           </ul>
-
-          <p className="mt-10 text-sm italic text-white/40">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
         </div>
       </div>
 
