@@ -1,9 +1,40 @@
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja) + világító lime körív,
-// alatta logó és elérhetőség-ikonok.
+// alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
+// pontrács (a hero és a footer keretezi az oldalt); a körív alatt lime derengés → petrol-deep.
 
 const EMAIL = "agardyb@protonmail.com";
 const PHONE = { display: "06 30 239 24 75", href: "tel:+36302392475" };
 const LINKEDIN = "https://www.linkedin.com/in/balazs-agardy-55802a51/";
+
+// Ugyanaz a négyzetes pontrács, mint a hero RiskGrid-jén (30px rács, 4px pötty), csak álló.
+const DOT_GRID =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Crect x='13' y='13' width='4' height='4' fill='white' fill-opacity='0.1'/%3E%3C/svg%3E\")";
+
+const COLUMNS = [
+  {
+    title: "Szolgáltatások",
+    links: [
+      { label: "Információbiztonsági felelős", href: "#szolgaltatasok" },
+      { label: "NIS2 felkészítés", href: "#szolgaltatasok" },
+      { label: "DORA és MNB", href: "#szolgaltatasok" },
+      { label: "TISAX", href: "#szolgaltatasok" },
+      { label: "IT audit", href: "#szolgaltatasok" },
+    ],
+  },
+  {
+    title: "Oldal",
+    links: [
+      { label: "Szolgáltatások", href: "#szolgaltatasok" },
+      { label: "Referenciák", href: "#referenciak" },
+      { label: "Kapcsolat", href: "#kapcsolat" },
+      { label: "LinkedIn", href: LINKEDIN, external: true },
+    ],
+  },
+  {
+    title: "Cég",
+    lines: ["Cyber Beaver Kft.", "Budapest", `© ${new Date().getFullYear()} Minden jog fenntartva.`],
+  },
+];
 
 const iconProps = {
   viewBox: "0 0 24 24",
@@ -59,8 +90,13 @@ function Arc() {
           <stop offset="0.75" stopColor="#d6f34b" />
           <stop offset="1" stopColor="#d6f34b" stopOpacity="0" />
         </linearGradient>
+        {/* derengés a vonal alatt: petrol-deep + 10% lime → lefelé tiszta petrol-deep */}
+        <linearGradient id="arc-fill" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="240">
+          <stop offset="0" stopColor="#1d4946" />
+          <stop offset="1" stopColor="#083645" />
+        </linearGradient>
       </defs>
-      <path d="M0 230 C 360 20, 1080 20, 1440 230 L1440 240 L0 240 Z" className="fill-arc" />
+      <path d="M0 230 C 360 20, 1080 20, 1440 230 L1440 240 L0 240 Z" fill="url(#arc-fill)" />
       <path
         d="M0 230 C 360 20, 1080 20, 1440 230"
         fill="none"
@@ -75,13 +111,17 @@ function Arc() {
 
 export default function Footer() {
   return (
-    <footer id="kapcsolat" className="overflow-hidden bg-night text-white">
+    <footer
+      id="kapcsolat"
+      className="overflow-hidden bg-petrol text-white"
+      style={{ backgroundImage: DOT_GRID, backgroundPosition: "center top" }}
+    >
       <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 text-center md:pt-32 md:pb-24">
         <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Beszéljünk a cégedről.</h2>
         <p className="mt-6 text-lg text-white/70">Egy rövid beszélgetésből kiderül, miben tudok segíteni.</p>
 
         {/* világító e-mail pill */}
-        <div className="mx-auto mt-10 flex w-full max-w-md items-center justify-between gap-3 rounded-full border border-lime/70 bg-white/5 p-1.5 pl-5 shadow-[0_0_40px_rgba(214,243,75,0.25)] sm:pl-6">
+        <div className="mx-auto mt-10 flex w-full max-w-md items-center justify-between gap-3 rounded-full border border-lime/70 bg-lime/10 p-1.5 pl-5 shadow-[0_0_40px_rgba(214,243,75,0.25)] sm:pl-6">
           <span className="min-w-0 break-all text-sm text-white/80 sm:text-base">{EMAIL}</span>
           <a
             href={`mailto:${EMAIL}`}
@@ -100,7 +140,7 @@ export default function Footer() {
 
       <Arc />
 
-      <div className="-mt-px bg-gradient-to-b from-arc to-night pb-20 text-center">
+      <div className="-mt-px bg-petrol-deep pb-16 text-center">
         <p className="text-2xl tracking-wide">
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
@@ -122,9 +162,35 @@ export default function Footer() {
             </a>
           </li>
         </ul>
-        <p className="mx-auto mt-10 max-w-xs px-4 text-sm italic text-white/40 sm:max-w-none">
-          „Mert csak a legokosabb hód tudja, merre dől a fa.”
-        </p>
+
+        <div className="mx-auto mt-16 max-w-6xl px-4 text-left">
+          <div className="border-t border-lime/50" />
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
+            {COLUMNS.map(({ title, links, lines }) => (
+              <div key={title} className="rounded-2xl bg-white/[0.04] p-8">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime">{title}</p>
+                <div className="mt-5 border-t border-white/15" />
+                <ul className="mt-5 space-y-3 text-white/80">
+                  {links?.map(({ label, href, external }) => (
+                    <li key={label}>
+                      <a
+                        href={href}
+                        className="hover:text-lime"
+                        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  ))}
+                  {lines?.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p className="mt-12 text-center text-sm italic text-white/40">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
+        </div>
       </div>
     </footer>
   );

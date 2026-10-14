@@ -129,17 +129,14 @@ export default function Services() {
     <section id="szolgaltatasok" className="bg-mist py-24 text-petrol-deep md:py-32">
       <div className="mx-auto max-w-6xl px-4">
         <SectionHeading
-          eyebrow="Miben tudok segíteni?"
-          title="A megfelelésen túl"
+          eyebrow="Szolgáltatások"
+          title="Miben tudok segíteni?"
           intro="Információbiztonsági tanácsadás, audit-felkészítés, folyamatok és szabályzatok — a cégedre szabva, nem sablonból."
         />
 
         <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(({ title, text, Icon }) => (
-            <li
-              key={title}
-              className="rounded-2xl border border-petrol/10 bg-white p-7 transition hover:-translate-y-0.5 hover:border-petrol/30 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-            >
+            <li key={title} className="rounded-2xl border border-petrol/10 bg-white p-7">
               <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
                 <Icon />
               </span>
