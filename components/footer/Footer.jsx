@@ -74,20 +74,14 @@ function PhoneIcon() {
   );
 }
 
-// Körív (flat): egyszínű lime vonal, alatta egyszínű petrol-deep kitöltés — nincs glow, nincs átmenet.
-// preserveAspectRatio="none" + non-scaling-stroke → bármilyen szélességen egyenletes vonalvastagság.
+// Körív (flat): valódi kör teteje — nem nyújtott ellipszis. A kör átmérője a footer szélességének 2×-ese;
+// a doboz magassága pontosan a kör "sagitta"-ja (1 − √0.75 ≈ 0.134 × szélesség), így az alsó élén a kör
+// húrja = teljes szélesség, és alatta a petrol-deep rész varrat nélkül folytatódik.
 function Arc() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 1440 240" preserveAspectRatio="none" className="block h-24 w-full md:h-40">
-      <path d="M0 230 C 360 20, 1080 20, 1440 230 L1440 240 L0 240 Z" className="fill-petrol-deep" />
-      <path
-        d="M0 230 C 360 20, 1080 20, 1440 230"
-        fill="none"
-        className="stroke-lime"
-        strokeWidth="3"
-        vectorEffect="non-scaling-stroke"
-      />
-    </svg>
+    <div aria-hidden="true" className="relative w-full overflow-hidden" style={{ aspectRatio: "7.4641" }}>
+      <div className="absolute top-0 left-1/2 aspect-square w-[200%] -translate-x-1/2 rounded-full border-[3px] border-lime bg-petrol-deep" />
+    </div>
   );
 }
 
