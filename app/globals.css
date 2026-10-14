@@ -36,6 +36,17 @@
   --text-5xl--line-height: 1.1;
   --text-6xl: 4.76837158203125rem; /* 76.29px */
   --text-6xl--line-height: 1.05;
+
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 html {
