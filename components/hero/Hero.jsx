@@ -1,6 +1,6 @@
 import RiskGrid from "./RiskGrid";
 
-const SERVICES = ["NIS2", "DORA / MNB", "TISAX", "GDPR", "Információbiztonsági felelős", "Kockázatelemzés", "IT audit"];
+const SERVICES = ["NIS2 felkészítés", "DORA / MNB", "TISAX", "GDPR", "Kockázatelemzés", "IT audit"];
 
 function Bracket({ side }) {
   return (
@@ -31,18 +31,20 @@ export default function Hero() {
         <div className="mx-auto w-fit max-w-full">
           <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Cyber Beaver Kft.</p>
 
-          <h1 className="text-[clamp(1.6rem,7vw,4.75rem)] font-bold leading-[1.1] tracking-tight">
+          {/* SEO fő kulcsszó: "kiszervezett információbiztonsági felelős" → H1 + title */}
+          <h1 className="text-[clamp(1.6rem,7vw,4.5rem)] font-bold leading-[1.1] tracking-tight">
             <span className="whitespace-nowrap text-lime">
               <Bracket side="left" />
-              Információbiztonsági
+              Kiszervezett
               <Bracket side="right" />
             </span>
             <br />
-            tanácsadás, felkészítés és audit.
+            információbiztonsági felelős
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-white/80 md:text-xl">
-            Big4-os precizitás és munkakultúra — a kisvállalkozások gyorsaságával és közvetlenségével.
+            Információbiztonsági tanácsadás, felkészítés és audit — Big4-os precizitással, a kisvállalkozások
+            gyorsaságával és közvetlenségével.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

@@ -7,9 +7,9 @@ const figtree = Figtree({
 });
 
 export const metadata = {
-  title: "Cyber Beaver — Információbiztonsági tanácsadás, felkészítés és audit",
+  title: "Kiszervezett információbiztonsági felelős | Cyber Beaver",
   description:
-    "NIS2 és DORA felkészítés, TISAX, adatvédelem, kockázatelemzés és IT audit. Big4-os precizitás, kisvállalkozói gyorsasággal.",
+    "Kiszervezett információbiztonsági felelős havidíjas alapon, Big4-os tapasztalattal. NIS2 és DORA felkészítés, TISAX, kockázatelemzés és IT audit.",
 };
 
 export default function RootLayout({ children }) {
