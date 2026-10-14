@@ -1,4 +1,3 @@
-import LogoTicker from "./LogoTicker";
 import RiskGrid from "./RiskGrid";
 
 const SERVICES = ["NIS2 felkészítés", "DORA / MNB", "TISAX", "GDPR", "Kockázatelemzés", "IT audit"];
@@ -16,7 +15,7 @@ function Bracket({ side }) {
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-petrol text-white">
+    <section className="relative isolate flex min-h-svh items-center overflow-hidden bg-petrol text-white">
       <RiskGrid />
       {/* sötétebb folt a szöveg mögött, hogy a rács ne zavarja az olvasást */}
       <div
@@ -28,7 +27,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="mx-auto flex w-full max-w-5xl flex-1 items-center justify-center px-4 pt-24 pb-8 text-center">
+      <div className="mx-auto w-full max-w-5xl px-4 py-24 text-center">
         <div className="mx-auto w-fit max-w-full">
           <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Cyber Beaver Kft.</p>
 
@@ -71,11 +70,9 @@ export default function Hero() {
         </div>
       </div>
 
-      <p className="pointer-events-none absolute right-6 top-6 hidden text-xs text-white/40 md:block">
+      <p className="pointer-events-none absolute bottom-6 right-6 hidden text-xs text-white/40 md:block">
         Vidd az egeret a piros pontok fölé
       </p>
-
-      <LogoTicker />
     </section>
   );
 }

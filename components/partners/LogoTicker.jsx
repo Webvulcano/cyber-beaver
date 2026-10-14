@@ -19,17 +19,16 @@ function Logo({ partner }) {
 
 export default function LogoTicker() {
   return (
-    <div
-      aria-label="Partnereink"
-      className="group relative w-full overflow-hidden py-10 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
-    >
-      <ul className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
-        {[...PARTNERS, ...PARTNERS].map((partner, i) => (
-          <li key={i} aria-hidden={i >= PARTNERS.length} className="shrink-0 px-8 md:px-12">
-            <Logo partner={partner} />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section aria-label="Partnereink" className="border-t border-white/10 bg-petrol py-12 text-white md:py-16">
+      <div className="group relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+        <ul className="flex w-max animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+          {[...PARTNERS, ...PARTNERS].map((partner, i) => (
+            <li key={i} aria-hidden={i >= PARTNERS.length} className="shrink-0 px-8 md:px-12">
+              <Logo partner={partner} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
