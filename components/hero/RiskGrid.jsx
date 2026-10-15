@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 // pontok egy idő után eltűnnek, máshol újak jelennek meg. Az egér körül is "gyógyul".
 
 const RISK = [255, 92, 80];
-// "gyógyult" szín = téma accent (--c-accent), ThemePicker váltáskor "cb-theme" eventet küld
+// "gyógyult" szín = téma accent (--c-accent a globals.css-ben)
 let OK = [255, 255, 255];
 function readAccent() {
   const hex = getComputedStyle(document.documentElement).getPropertyValue("--c-accent").trim().replace("#", "");
@@ -36,8 +36,6 @@ export default function RiskGrid() {
 
   useEffect(() => {
     readAccent();
-    window.addEventListener("cb-theme", readAccent);
-    return () => window.removeEventListener("cb-theme", readAccent);
   }, []);
 
   useEffect(() => {

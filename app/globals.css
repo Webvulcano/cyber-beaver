@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Színtéma: az oldal minden színe ezekből jön. A tényleges értéket a components/theme/themes.js
-     első témája adja (layout.js inline a <html>-re), ez csak fallback. A ThemePicker ezeket írja felül. */
+  /* Színtéma (Smaragd – lágy): az oldal minden színe ezekből jön. */
   --c-base: #22282a; /* nagy sötét felületek (hero, ticker, footer) */
   --c-base-deep: #181c1e; /* sötétebb változat + sötét szöveg világos háttéren */
   --c-accent: #6cc4a1; /* kiemelés, gombok, pontrács "gyógyult" színe */
