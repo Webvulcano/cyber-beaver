@@ -1,11 +1,15 @@
+// Referenciák: vízszintesen lapozható kártyasor (trackpad oldalra húzás, Shift+görgő, mobilon swipe).
+// Natív overflow-x scroll + scroll-snap: elengedés után a legközelebbi kártya a tartalom-oszlop
+// bal széléhez kattan. A függőleges görgetést nem téríti el. Nyilak: Carousel.jsx.
 import SectionHeading from "@/components/SectionHeading";
+import Carousel from "./Carousel";
 import { BankIcon, EnergyIcon, KkvIcon } from "@/components/partners/logos";
 
 // Tartalom: a régi cyberbeaver.hu alapján. Ügyfélnevek nélkül (titoktartás).
 const SECTOR = {
   bank: { label: "Bank", Icon: () => <BankIcon className="size-5" /> },
   energy: { label: "Energia", Icon: () => <EnergyIcon className="size-5" /> },
-  kkv: { label: "KKV", Icon: () => <KkvIcon className="size-5" inner="#d6f34b" /> },
+  kkv: { label: "KKV", Icon: () => <KkvIcon className="size-5" inner="var(--c-accent)" /> },
 };
 
 const REFERENCES = [
@@ -51,54 +55,58 @@ const REFERENCES = [
   },
 ];
 
-export default function References() {
+function Card({ index, years, title, client, sector, text, tags }) {
+  const { label, Icon } = SECTOR[sector];
   return (
-    <section id="referenciak" className="bg-mist pb-24 text-petrol-deep md:pb-32">
-      <div className="mx-auto max-w-6xl px-4">
-        <SectionHeading
-          eyebrow="Referenciák"
-          title="Akiknek már segítettem"
-          intro="10+ év Big4 tapasztalat után, a hazai bankszektortól a KKV-kig."
-        />
-
-        <ol className="mt-14 border-l-2 border-petrol/15 md:ml-[9rem]">
-          {REFERENCES.map(({ years, title, client, sector, text, tags }) => {
-            const { label, Icon } = SECTOR[sector];
-            return (
-              <li key={title} className="relative pb-12 pl-8 last:pb-0 md:pl-10">
-                {/* pötty a vonalon */}
-                <span
-                  aria-hidden="true"
-                  className="absolute -left-[9px] top-1.5 size-4 rounded-full border-4 border-mist bg-lime"
-                />
-                {/* évszám: mobilon a cím fölött, desktopon a vonal bal oldalán */}
-                <p className="mb-2 text-lg font-bold md:absolute md:-left-[9rem] md:top-0 md:mb-0 md:w-28 md:whitespace-nowrap md:text-right">
-                  {years}
-                </p>
-
-                <h3 className="text-xl font-semibold">{title}</h3>
-                <p className="mt-2 flex items-center gap-2 font-semibold text-petrol/70">
-                  <span
-                    className="flex size-7 items-center justify-center rounded-md bg-lime text-petrol-deep"
-                    title={label}
-                  >
-                    <Icon />
-                  </span>
-                  {client}
-                </p>
-                <p className="mt-3 max-w-2xl text-petrol/70">{text}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <li key={tag} className="rounded-full bg-lime/40 px-3 py-1 text-sm font-medium">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            );
-          })}
-        </ol>
+    <li className="flex w-[82vw] shrink-0 snap-start flex-col rounded-3xl border border-petrol/10 bg-white p-8 sm:w-[26rem] md:p-10">
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-2 rounded-full bg-mist py-1.5 pr-4 pl-1.5 text-sm font-semibold">
+          <span className="flex size-7 items-center justify-center rounded-full bg-lime text-petrol-deep">
+            <Icon />
+          </span>
+          {label}
+        </span>
+        <span className="text-sm font-semibold text-petrol/40">{String(index + 1).padStart(2, "0")}</span>
       </div>
+
+      <p className="mt-10 text-2xl font-bold text-petrol/30">{years}</p>
+      <h3 className="mt-2 text-xl font-semibold">{title}</h3>
+      <p className="mt-1 font-semibold text-petrol/60">{client}</p>
+      <p className="mt-5 text-petrol/70">{text}</p>
+
+      <ul className="mt-auto flex flex-wrap gap-2 pt-8">
+        {tags.map((tag) => (
+          <li key={tag} className="rounded-full bg-lime/40 px-3 py-1 text-sm font-medium">
+            {tag}
+          </li>
+        ))}
+      </ul>
+    </li>
+  );
+}
+
+export default function References() {
+  // bal szél a tartalom-oszlophoz (max-w-6xl) igazítva — padding és snap-igazítás ugyanazzal
+  const edge = "px-4 xl:px-[calc((100vw-72rem)/2+1rem)]";
+
+  return (
+    <section id="referenciak" className="bg-mist py-24 text-petrol-deep md:py-32">
+      <Carousel
+        edgeClass={edge}
+        scrollPadClass="scroll-px-4 xl:scroll-px-[calc((100vw-72rem)/2+1rem)]"
+        heading={
+          <SectionHeading
+            /*eyebrow="Referenciák"
+            title="Akiknek már segítettem"*/
+            title="Referenciák"
+            intro="10+ év Big4 tapasztalat után, a hazai bankszektortól a KKV-kig."
+          />
+        }
+      >
+        {REFERENCES.map((ref, i) => (
+          <Card key={ref.title} index={i} {...ref} />
+        ))}
+      </Carousel>
     </section>
   );
 }

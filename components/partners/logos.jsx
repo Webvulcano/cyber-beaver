@@ -16,11 +16,11 @@ export function BankIcon({ className = "size-9" }) {
 }
 
 // inner = a "K" színe (a háttérhez igazítva, mert kivágásként látszik)
-export function KkvIcon({ className = "size-8", inner = "#0b4456" }) {
+export function KkvIcon({ className = "size-8", inner = "var(--c-base)" }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
       <rect x="1" y="1" width="30" height="30" rx="9" fill="currentColor" />
-      <path d="M10 8v16M10 16l9-8M13 13l8 11" stroke={inner} strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M10 8v16M10 16l9-8M13 13l8 11" style={{ stroke: inner }} strokeWidth="3.5" strokeLinecap="round" fill="none" />
     </svg>
   );
 }

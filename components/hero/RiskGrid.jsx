@@ -2,12 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
-// Kockázat-szkenner háttér: pontrács piros "kockázat" klaszterekkel. 3-4 lime "kígyó" halad a
-// pöttyök mentén, a kockázatok felé tart, és amin átmegy, az zöldre (lime) vált. A meggyógyult
+// Kockázat-szkenner háttér: pontrács piros "kockázat" klaszterekkel. 3-4 accent "kígyó" halad a
+// pöttyök mentén, a kockázatok felé tart, és amin átmegy, az accent színre vált. A meggyógyult
 // pontok egy idő után eltűnnek, máshol újak jelennek meg. Az egér körül is "gyógyul".
 
 const RISK = [255, 92, 80];
-const OK = [214, 243, 75];
+// "gyógyult" szín = téma accent (--c-accent), ThemePicker váltáskor "cb-theme" eventet küld
+let OK = [255, 255, 255];
+function readAccent() {
+  const hex = getComputedStyle(document.documentElement).getPropertyValue("--c-accent").trim().replace("#", "");
+  if (hex.length === 6) OK = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+}
 const BASE = [255, 255, 255];
 
 const DIRS = [
@@ -28,6 +33,12 @@ const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
 
 export default function RiskGrid() {
   const canvasRef = useRef(null);
+
+  useEffect(() => {
+    readAccent();
+    window.addEventListener("cb-theme", readAccent);
+    return () => window.removeEventListener("cb-theme", readAccent);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;

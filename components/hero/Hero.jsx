@@ -23,7 +23,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(ellipse 48% 42% at 50% 50%, rgba(11,68,86,0.97) 0%, rgba(11,68,86,0.85) 45%, rgba(11,68,86,0) 100%)",
+            "radial-gradient(ellipse 48% 42% at 50% 50%, color-mix(in srgb, var(--c-base) 97%, transparent) 0%, color-mix(in srgb, var(--c-base) 85%, transparent) 45%, transparent 100%)",
         }}
       />
 
@@ -43,8 +43,7 @@ export default function Hero() {
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-white/80 md:text-xl">
-            Információbiztonsági tanácsadás, felkészítés és audit — Big4-os precizitással, a kisvállalkozások
-            gyorsaságával és közvetlenségével.
+            Információbiztonsági tanácsadás, felkészítés és audit
           </p>
 
           <div className="mt-10 flex justify-center">

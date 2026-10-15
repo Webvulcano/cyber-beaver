@@ -1,18 +1,25 @@
 @import "tailwindcss";
 
 :root {
+  /* Színtéma: az oldal minden színe ezekből jön. A tényleges értéket a components/theme/themes.js
+     első témája adja (layout.js inline a <html>-re), ez csak fallback. A ThemePicker ezeket írja felül. */
+  --c-base: #22282a; /* nagy sötét felületek (hero, ticker, footer) */
+  --c-base-deep: #181c1e; /* sötétebb változat + sötét szöveg világos háttéren */
+  --c-accent: #6cc4a1; /* kiemelés, gombok, pontrács "gyógyult" színe */
+  --c-surface: #f2f4f3; /* világos szekciók háttere */
   --background: #ffffff;
-  --foreground: #0b2f3a;
+  --foreground: var(--c-base-deep);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-petrol: #0b4456;
-  --color-petrol-deep: #083645;
-  --color-lime: #d6f34b;
+  /* A token-nevek történetiek (petrol/lime), a szerepük: petrol = base, lime = accent, mist = surface. */
+  --color-petrol: var(--c-base);
+  --color-petrol-deep: var(--c-base-deep);
+  --color-lime: var(--c-accent);
   --color-risk: #ff5c50;
-  --color-mist: #f2f7f6;
+  --color-mist: var(--c-surface);
   --font-sans: var(--font-figtree);
 
   /* Tipográfia: alap 16px, major third (×1.25) skála. Csak ezeket a text-* osztályokat használd,

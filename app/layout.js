@@ -1,5 +1,7 @@
 import { Figtree } from "next/font/google";
 import "./globals.css";
+import ThemePicker from "@/components/theme/ThemePicker";
+import { THEMES, themeVars } from "@/components/theme/themes";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -14,8 +16,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="hu" className={`${figtree.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="hu" style={themeVars(THEMES[0])} className={`${figtree.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ThemePicker />
+      </body>
     </html>
   );
 }

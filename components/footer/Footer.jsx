@@ -1,12 +1,15 @@
 import Image from "next/image";
+import ContactForm from "./ContactForm";
 
-// Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja) + világító lime körív,
+// Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja: "Hívj fel" CTA + űrlap) + lime körív,
 // alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
 // pontrács (a hero és a footer keretezi az oldalt); a körív alatt egyszínű petrol-deep. Flat: nincs glow.
 
 const EMAIL = "agardyb@protonmail.com";
-const PHONE = { display: "06 30 239 24 75", href: "tel:+36302392475" };
+const PHONE = { display: "+36 30 239 24 75", href: "tel:+36302392475" };
 const LINKEDIN = "https://www.linkedin.com/in/balazs-agardy-55802a51/";
+// modul-szinten: Cache Components mellett render közben nem lehet new Date()
+const YEAR = new Date().getFullYear();
 
 // Ugyanaz a négyzetes pontrács, mint a hero RiskGrid-jén (30px rács, 4px pötty), csak álló.
 const DOT_GRID =
@@ -33,8 +36,12 @@ const COLUMNS = [
     ],
   },
   {
-    title: "Cég",
-    lines: ["Cyber Beaver Kft.", "Budapest", `© ${new Date().getFullYear()} Minden jog fenntartva.`],
+    title: "Kapcsolat",
+    lines: ["Cyber Beaver Kft.", "Budapest"],
+    links: [
+      { label: EMAIL, href: `mailto:${EMAIL}` },
+      { label: PHONE.display, href: PHONE.href },
+    ],
   },
 ];
 
@@ -92,26 +99,25 @@ export default function Footer() {
       className="overflow-hidden bg-petrol text-white"
       style={{ backgroundImage: DOT_GRID, backgroundPosition: "center top" }}
     >
-      <div className="mx-auto max-w-3xl px-4 pt-24 pb-16 text-center md:pt-32 md:pb-24">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Beszéljünk a cégedről.</h2>
-        <p className="mt-6 text-lg text-white/70">Egy rövid beszélgetésből kiderül, miben tudok segíteni.</p>
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-24 pb-16 md:pt-32 md:pb-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+        {/* bal: cím + "Hívj fel" CTA + e-mail */}
+        <div className="lg:pt-4">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Kapcsolat</p>
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Kérj ajánlatot vagy egyeztessünk.</h2>
+          <p className="mt-6 text-lg text-white/70">
+            Írd meg röviden, miben segíthetek, és 1 munkanapon belül jelentkezem. Ha sürgős, hívj fel bátran.
+          </p>
 
-        {/* e-mail pill */}
-        <div className="mx-auto mt-10 flex w-full max-w-md items-center justify-between gap-3 rounded-full border-2 border-lime bg-petrol-deep p-1.5 pl-5 sm:pl-6">
-          <span className="min-w-0 break-all text-sm text-white/80 sm:text-base">{EMAIL}</span>
           <a
-            href={`mailto:${EMAIL}`}
-            className="shrink-0 rounded-full bg-lime px-5 py-3 font-semibold text-petrol-deep transition hover:brightness-110 sm:px-6"
+            href={PHONE.href}
+            className="mt-10 inline-flex w-full items-center justify-center gap-3 rounded-full bg-lime px-8 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
           >
-            Írj nekem
+            <PhoneIcon />
+            Hívj fel: {PHONE.display}
           </a>
         </div>
-        <p className="mt-5 text-sm text-white/60">
-          vagy hívj:{" "}
-          <a href={PHONE.href} className="font-semibold text-white hover:text-lime">
-            {PHONE.display}
-          </a>
-        </p>
+
+        <ContactForm />
       </div>
 
       <Arc />
@@ -123,6 +129,7 @@ export default function Footer() {
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
         </p>
+        <p className="mt-3 px-4 text-sm italic text-white/50">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
         <ul className="mt-8 flex justify-center gap-6 text-lime">
           <li>
             <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white">
@@ -153,9 +160,9 @@ export default function Footer() {
                     <li key={label}>
                       <a
                         href={href}
-                        className="hover:text-lime"
+                        className="break-all hover:text-lime"
                         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                      >
+                        >
                         {label}
                       </a>
                     </li>
@@ -167,8 +174,12 @@ export default function Footer() {
               </div>
             ))}
           </div>
-          <p className="mt-12 text-center text-sm italic text-white/40">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
         </div>
+      </div>
+
+      {/* legalsó sáv: copyright */}
+      <div className="border-t border-white/10 bg-petrol-deep px-4 py-6 text-center text-sm text-white/40">
+        © {YEAR} Cyber Beaver Kft. Minden jog fenntartva.
       </div>
     </footer>
   );
