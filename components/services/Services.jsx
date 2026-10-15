@@ -1,14 +1,6 @@
 import SectionHeading from "@/components/SectionHeading";
 import Details from "./Details";
 
-// TODO: elírások a régi oldalról, szó szerint átvéve — Lehel jelzéséig maradnak, kiemelve hogy látszódjanak.
-// Javítás után a <Typo> csomagolás törölhető.
-function Typo({ children }) {
-  return (
-    <strong className="rounded bg-risk/15 px-0.5 text-risk">{children}</strong>
-  );
-}
-
 // Ikonok: 24×24, 2px round stroke, egységes stílus.
 const icon = (paths) =>
   function Icon() {
@@ -83,7 +75,7 @@ const TeachIcon = icon(
   </>,
 );
 
-// Tartalom: szó szerint a régi cyberbeaver.hu-ról (az ügyfél kérésére, sorrend és helyesírás is).
+// Tartalom: szó szerint a régi cyberbeaver.hu-ról (sorrend is), a helyesírási hibák javítva.
 const SERVICES = [
   {
     title: "Információbiztonsági felelős",
@@ -92,27 +84,12 @@ const SERVICES = [
   },
   {
     title: "NIS2 felkészítés",
-    text: (
-      <>
-        <Typo>TEljeskörű</Typo> NIS2 felkészítés a gap elemzéstől a
-        megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már
-        együtt <Typo>nis2</Typo> megfelelőségen, továbbá végeztem NIS2 auditokat
-        is. A felkészítés során figyelembe veszem az adott cég sajátosságait és
-        az auditori elvárásokat, módszertanokat is.
-      </>
-    ),
+    text: "Teljeskörű NIS2 felkészítés a gap elemzéstől a megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már együtt NIS2 megfelelőségen, továbbá végeztem NIS2 auditokat is. A felkészítés során figyelembe veszem az adott cég sajátosságait és az auditori elvárásokat, módszertanokat is.",
     Icon: ChecklistIcon,
   },
   {
     title: "DORA és MNB megfelelőség",
-    text: (
-      <>
-        A hazai bankszektor nagy részével dolgoztam már együtt törvényi
-        megfelelőségi <Typo>projektEKEN</Typo>. Az elmúlt évek tapasztalatát
-        felhasználva hatékonyan és célorientáltan tudok DORA vagy egyéb MNB
-        megfelelőségben segíteni.
-      </>
-    ),
+    text: "A hazai bankszektor nagy részével dolgoztam már együtt törvényi megfelelőségi projekteken. Az elmúlt évek tapasztalatát felhasználva hatékonyan és célorientáltan tudok DORA vagy egyéb MNB megfelelőségben segíteni.",
     Icon: BankIcon,
   },
   {
@@ -122,23 +99,12 @@ const SERVICES = [
   },
   {
     title: "Adatvédelem",
-    text: (
-      <>
-        <Typo>ki</Typo> emlékszik már a GDPR-ra?! Pedig az adatvédelem és annak
-        IT oldali elvárásai továbbra is ugyanolyan relevánsak.
-      </>
-    ),
+    text: "Ki emlékszik már a GDPR-ra?! Pedig az adatvédelem és annak IT oldali elvárásai továbbra is ugyanolyan relevánsak.",
     Icon: LockIcon,
   },
   {
     title: "TISAX tanácsadás és felkészítés",
-    text: (
-      <>
-        Több ügyfelemet is segítettem már sikeres TISAX minősítés elérésben.
-        Hatékony, gyors, a <Typo>tisax</Typo> elvárásainak megfelelő és
-        praktikus TISAX felkészítést vállalok.
-      </>
-    ),
+    text: "Több ügyfelemet is segítettem már sikeres TISAX minősítés elérésben. Hatékony, gyors, a TISAX elvárásainak megfelelő és praktikus TISAX felkészítést vállalok.",
     Icon: GearIcon,
   },
   {
@@ -148,23 +114,12 @@ const SERVICES = [
   },
   {
     title: "Harmadik felek kockázatkezelés (TPRM)",
-    text: (
-      <>
-        Segítek kialakítani egy gyakorlatban is használható, ugyanakkor törvényi
-        elvárásoknak is megfelelő TPRM folyamatot. <Typo>igény</Typo> esetén
-        elvégzem a szállítói auditokat is.
-      </>
-    ),
+    text: "Segítek kialakítani egy gyakorlatban is használható, ugyanakkor törvényi elvárásoknak is megfelelő TPRM folyamatot. Igény esetén elvégzem a szállítói auditokat is.",
     Icon: LinkIcon,
   },
   {
     title: "IT audit",
-    text: (
-      <>
-        <Typo>teljesen</Typo> vagy részben kiszervezett IT belső ellenőri
-        feladatok ellátása nagyvállalatok, pénzintézetek számára.
-      </>
-    ),
+    text: "Teljesen vagy részben kiszervezett IT belső ellenőri feladatok ellátása nagyvállalatok, pénzintézetek számára.",
     Icon: SearchIcon,
   },
 ];
