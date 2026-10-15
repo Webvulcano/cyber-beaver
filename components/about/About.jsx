@@ -3,7 +3,6 @@ import portrait from "@/public/nincshatter.png";
 import cisa from "@/public/minositesek/cisa.webp";
 import cism from "@/public/minositesek/cism.webp";
 import iso27001 from "@/public/minositesek/iso27001.webp";
-import iso42001 from "@/public/minositesek/iso42001.webp";
 
 // Tartalom: a régi cyberbeaver.hu bemutatkozó szövege alapján.
 // Minősítések: zemitis.hu "Rólunk" szekció alapján.
@@ -11,7 +10,6 @@ const FACTS = [
   { value: "CISA", label: "Minősített informatikai rendszerellenőr", logo: cisa },
   { value: "CISM", label: "Minősített információbiztonsági menedzser", logo: cism },
   { value: "ISO/IEC 27001", label: "Lead Auditor", logo: iso27001 },
-  { value: "ISO/IEC 42001", label: "Lead Auditor", logo: iso42001 },
 ];
 
 export default function About() {
@@ -39,9 +37,9 @@ export default function About() {
           </div>
 
           <h3 className="mt-12 border-t border-white/15 pt-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">
-            Minősítéseim
+            Tanusítványok
           </h3>
-          <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4">
+          <dl className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-3">
             {FACTS.map(({ value, label, logo }) => (
               <div key={value} className="flex flex-col-reverse justify-end">
                 <dt className="mt-1 text-sm text-white/60">{label}</dt>
