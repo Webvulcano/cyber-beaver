@@ -86,8 +86,18 @@ const TeachIcon = icon(
 );
 
 // A szövegek az Ügyfél Adminból jönnek (alapérték: content/site.js).
-// Kártya-ikonok sorrend szerint; ha az adminban új kártya kerül a végére, az ShieldIcon-t kap.
-const ICONS = [ChecklistIcon, AuditIcon, BankIcon, TeachIcon, LockIcon, CarIcon, ChartIcon, LinkIcon, SearchIcon];
+// Kártya-ikon a kártya rejtett `icon` mezőjéből (átrendezéskor vele mozog); ismeretlen → pajzs.
+const ICONS = {
+  checklist: ChecklistIcon,
+  audit: AuditIcon,
+  bank: BankIcon,
+  teach: TeachIcon,
+  lock: LockIcon,
+  car: CarIcon,
+  chart: ChartIcon,
+  link: LinkIcon,
+  search: SearchIcon,
+};
 
 export default async function Services() {
   const cms = await getCms();
@@ -158,8 +168,8 @@ export default async function Services() {
 
         {/* items-start: a lenyitott kártya egyedül nő, a sor többi kártyája nem nyúlik vele */}
         <ul className="mt-6 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map(({ title, text }, i) => {
-            const Icon = ICONS[i] ?? ShieldIcon;
+          {items.map(({ icon, title, text }, i) => {
+            const Icon = ICONS[icon] ?? ShieldIcon;
             return (
               <li
                 key={i}

@@ -12,11 +12,10 @@ const SECTOR = {
   energy: { label: "Energia", Icon: () => <EnergyIcon className="size-5" /> },
   kkv: { label: "KKV", Icon: () => <KkvIcon className="size-5" inner="var(--c-accent)" /> },
 };
-// Ágazat-címke sorrend szerint; az adminban a végére felvett új referencia KKV-t kap.
-const SECTORS = ["energy", "bank", "kkv", "bank", "bank"];
 
-function Card({ index, years, title, client, text, tags, attr }) {
-  const { label, Icon } = SECTOR[SECTORS[index] ?? "kkv"];
+// sector: a referencia rejtett mezője (átrendezéskor vele mozog); ismeretlen → KKV.
+function Card({ index, sector, years, title, client, text, tags, attr }) {
+  const { label, Icon } = SECTOR[sector] ?? SECTOR.kkv;
   return (
     <li className="flex w-[82vw] shrink-0 snap-start flex-col rounded-3xl border border-petrol/10 bg-white p-8 sm:w-[26rem] md:p-10">
       <div className="flex items-center justify-between">

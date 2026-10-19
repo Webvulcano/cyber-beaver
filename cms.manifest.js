@@ -90,6 +90,7 @@ const manifest = {
               label: "További szolgáltatások",
               type: "list",
               itemFields: [
+                { key: "icon", label: "Ikon", type: "text", maxLength: 20, hidden: true },
                 { key: "title", label: "Cím", type: "text", maxLength: 60 },
                 { key: "text", label: "Részletek", type: "textarea", maxLength: 600 },
               ],
@@ -108,6 +109,7 @@ const manifest = {
               label: "Referenciák",
               type: "list",
               itemFields: [
+                { key: "sector", label: "Ágazat", type: "text", maxLength: 20, hidden: true },
                 { key: "years", label: "Év(ek)", type: "text", maxLength: 20 },
                 { key: "title", label: "Cím", type: "text", maxLength: 60 },
                 { key: "client", label: "Ügyfél", type: "text", maxLength: 60 },

@@ -69,39 +69,47 @@ export const SERVICES = {
   ],
   othersTitle: "További szolgáltatások",
   // Tartalom: szó szerint a régi cyberbeaver.hu-ról (sorrend is), a helyesírási hibák javítva.
-  // Az ikonok sorrend szerint mennek (components/services/Services.jsx ICONS).
+  // icon: rejtett mező (az adminban nem látszik), a kártyával együtt mozog átrendezéskor → Services.jsx ICONS.
   items: [
     {
+      icon: "checklist",
       title: "NIS2 felkészítés",
       text: "Teljeskörű NIS2 felkészítés a gap elemzéstől a megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már együtt NIS2 megfelelőségen, továbbá végeztem NIS2 auditokat is. A felkészítés során figyelembe veszem az adott cég sajátosságait és az auditori elvárásokat, módszertanokat is.",
     },
     // TODO: szöveg később (Balázstól)
-    { title: "NIS2 audit támogatás", text: "" },
+    { icon: "audit", title: "NIS2 audit támogatás", text: "" },
     {
+      icon: "bank",
       title: "DORA és MNB megfelelőség",
       text: "A hazai bankszektor nagy részével dolgoztam már együtt törvényi megfelelőségi projekteken. Az elmúlt évek tapasztalatát felhasználva hatékonyan és célorientáltan tudok DORA vagy egyéb MNB megfelelőségben segíteni.",
     },
     {
+      icon: "teach",
       title: "Tudatossági oktatás",
       text: "A tudatossági oktatások nem csak törvényi megfelelőség miatt fontosak, hanem gyakorlati hasznuk is van. Non-profit szervezeteknek, iskoláknak, közintézményeknek limitáltan pro-bono is vállalom oktatás megtartását.",
     },
     {
+      icon: "lock",
       title: "Adatvédelem",
       text: "Ki emlékszik már a GDPR-ra?! Pedig az adatvédelem és annak IT oldali elvárásai továbbra is ugyanolyan relevánsak.",
     },
     {
+      icon: "car",
       title: "TISAX tanácsadás és felkészítés",
       text: "Több ügyfelemet is segítettem már sikeres TISAX minősítés elérésben. Hatékony, gyors, a TISAX elvárásainak megfelelő és praktikus TISAX felkészítést vállalok.",
     },
     {
+      icon: "chart",
       title: "Információbiztonsági kockázatelemzés",
       text: "Praktikus, a gyakorlatban is jól használható, az adott vállalatra szabott kockázatelemzést végzek, amely megfelel a törvényi elvárásoknak vagy iparági keretrendszereknek is.",
     },
     {
+      icon: "link",
       title: "Harmadik felek kockázatkezelés (TPRM)",
       text: "Segítek kialakítani egy gyakorlatban is használható, ugyanakkor törvényi elvárásoknak is megfelelő TPRM folyamatot. Igény esetén elvégzem a szállítói auditokat is.",
     },
     {
+      icon: "search",
       title: "IT audit",
       text: "Teljesen vagy részben kiszervezett IT belső ellenőri feladatok ellátása nagyvállalatok, pénzintézetek számára.",
     },
@@ -109,12 +117,13 @@ export const SERVICES = {
 };
 
 // Tartalom: a régi cyberbeaver.hu alapján. Ügyfélnevek nélkül (titoktartás).
-// Az ágazat-ikon sorrend szerint megy (components/references/References.jsx SECTORS).
+// sector: rejtett mező (energy | bank | kkv), átrendezéskor a kártyával mozog → References.jsx SECTOR.
 export const REFERENCES = {
   title: "Referenciák",
   intro: "10+ év Big4 tapasztalat után, a hazai bankszektortól a KKV-kig.",
   items: [
     {
+      sector: "energy",
       years: "2025–",
       title: "Információbiztonsági felelős",
       client: "Energiaipari vállalat",
@@ -122,6 +131,7 @@ export const REFERENCES = {
       tags: ["IBF"],
     },
     {
+      sector: "bank",
       years: "2025",
       title: "Kiberbiztonsági érettségelemzés",
       client: "Hazai bank",
@@ -129,6 +139,7 @@ export const REFERENCES = {
       tags: ["NIST CSF"],
     },
     {
+      sector: "kkv",
       years: "2024–2025",
       title: "NIS2 felkészítés",
       client: "Több hazai KKV",
@@ -136,6 +147,7 @@ export const REFERENCES = {
       tags: ["NIS2"],
     },
     {
+      sector: "bank",
       years: "2024",
       title: "DORA GAP-elemzés és implementáció",
       client: "Hazai bank",
@@ -143,6 +155,7 @@ export const REFERENCES = {
       tags: ["DORA", "MNB"],
     },
     {
+      sector: "bank",
       years: "2023",
       title: "Kiberbiztonsági projektmenedzser",
       client: "Hazai nagybank",
