@@ -19,7 +19,7 @@ const REFERENCES = [
     client: "Energiaipari vállalat",
     sector: "energy",
     text: "Kiszervezett információbiztonsági felelősként folyamatosan támogatom egy hazai energiacég megfelelését.",
-    tags: ["IBF", "Havidíjas"],
+    tags: ["IBF"],
   },
   {
     years: "2025",

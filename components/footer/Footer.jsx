@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ContactForm from "./ContactForm";
 
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja: "Hívj fel" CTA + űrlap) + lime körív,
@@ -81,13 +80,14 @@ function PhoneIcon() {
   );
 }
 
-// Körív (flat): valódi kör teteje — nem nyújtott ellipszis. A kör átmérője a footer szélességének 2×-ese;
-// a doboz magassága pontosan a kör "sagitta"-ja (1 − √0.75 ≈ 0.134 × szélesség), így az alsó élén a kör
-// húrja = teljes szélesség, és alatta a petrol-deep rész varrat nélkül folytatódik.
+// Körív (flat): valódi kör teteje — nem nyújtott ellipszis. A kör átmérője a footer szélességének 3×-osa
+// (laposabb ív, hogy legörgetve a teteje még látsszon); a doboz magassága pontosan a kör "sagitta"-ja
+// (1.5 − √2 ≈ 0.0858 × szélesség → aspect 11.657), így az alsó élén a kör húrja = teljes szélesség,
+// és alatta a petrol-deep rész varrat nélkül folytatódik.
 function Arc() {
   return (
-    <div aria-hidden="true" className="relative w-full overflow-hidden" style={{ aspectRatio: "7.4641" }}>
-      <div className="absolute top-0 left-1/2 aspect-square w-[200%] -translate-x-1/2 rounded-full border-[3px] border-lime bg-petrol-deep" />
+    <div aria-hidden="true" className="relative w-full overflow-hidden" style={{ aspectRatio: "11.657" }}>
+      <div className="absolute top-0 left-1/2 aspect-square w-[300%] -translate-x-1/2 rounded-full border-[3px] border-lime bg-petrol-deep" />
     </div>
   );
 }
@@ -122,15 +122,15 @@ export default function Footer() {
 
       <Arc />
 
-      <div className="-mt-px bg-petrol-deep pb-16 text-center">
+      <div className="-mt-px bg-petrol-deep pb-10 text-center">
         {/* logo-mark-white.png: a public/logo.jpg hódfeje fehérre, átlátszó háttérrel (felirat nélkül) */}
-        <Image src="/logo-mark-white.png" alt="" width={579} height={516} className="mx-auto mb-6 h-20 w-auto" />
+        <img src="/logo-mark-white.png" alt="" width={579} height={516} className="mx-auto mb-4 h-16 w-auto" />
         <p className="text-2xl tracking-wide">
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
         </p>
         <p className="mt-3 px-4 text-sm italic text-white/50">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
-        <ul className="mt-8 flex justify-center gap-6 text-lime">
+        <ul className="mt-6 flex justify-center gap-6 text-lime">
           <li>
             <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white">
               <LinkedInIcon />
@@ -148,14 +148,14 @@ export default function Footer() {
           </li>
         </ul>
 
-        <div className="mx-auto mt-16 max-w-6xl px-4 text-left">
+        <div className="mx-auto mt-10 max-w-6xl px-4 text-left">
           <div className="border-t border-lime/50" />
-          <div className="mt-12 grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
             {COLUMNS.map(({ title, links, lines }) => (
-              <div key={title} className="rounded-2xl bg-white/[0.04] p-8">
+              <div key={title} className="rounded-2xl bg-white/[0.04] p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime">{title}</p>
-                <div className="mt-5 border-t border-white/15" />
-                <ul className="mt-5 space-y-3 text-white/80">
+                <div className="mt-4 border-t border-white/15" />
+                <ul className="mt-4 space-y-2 text-white/80">
                   {links?.map(({ label, href, external }) => (
                     <li key={label}>
                       <a
@@ -178,7 +178,7 @@ export default function Footer() {
       </div>
 
       {/* legalsó sáv: copyright */}
-      <div className="border-t border-white/10 bg-petrol-deep px-4 py-6 text-center text-sm text-white/40">
+      <div className="border-t border-white/10 bg-petrol-deep px-4 py-4 text-center text-sm text-white/40">
         © {YEAR} Cyber Beaver Kft. Minden jog fenntartva.
       </div>
     </footer>

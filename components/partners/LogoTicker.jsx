@@ -1,27 +1,26 @@
 // Partner-logó ticker: végtelenített, jobbról balra úszó sor (csak CSS animáció).
 // A sor kétszer van renderelve, az animáció -50%-ig tol → varratmentes ismétlés.
-// TODO: valódi partner-logók (ügyfél engedélyével) a demo logók helyére.
-import { Bank1Logo, Energia3Logo, Kkv2Logo, Szoftverceg4Logo } from "./logos";
+// Logók: public/companies/. A színes logókat a `brightness-0 invert` egységesen fehérre húzza.
+// h = magasság: széles (fekvő) logó alacsonyabb, kompakt (álló) logó magasabb, hogy optikailag egyformák legyenek.
 
 const PARTNERS = [
-  { name: "Bank1", Logo: Bank1Logo },
-  { name: "KKV2", Logo: Kkv2Logo },
-  { name: "Energia3", Logo: Energia3Logo },
-  { name: "Szoftvercég4", Logo: Szoftverceg4Logo },
+  { name: "Middle East Privacy", src: "/companies/Logo_white-1.svg", h: "h-8" },
+  { name: "Premier Energy", src: "/companies/PE-Group-color.svg", h: "h-8" },
+  { name: "MB Energy", src: "/companies/Signet.svg", h: "h-7" },
+  { name: "BTS", src: "/companies/bts-logo-white.png", h: "h-16" },
+  { name: "Cybershield Consulting", src: "/companies/logo-1.svg", h: "h-14" },
+  { name: "Lotus Therme Hotel & Spa", src: "/companies/logo-30-white.png", h: "h-16" },
+  { name: "Yigsoft", src: "/companies/logo_1.png", h: "h-9" },
 ];
-
-// Kevés logónál széles képernyőn rés maradna → a sort ismételjük, hogy biztosan kitöltse.
-const ROW = [...PARTNERS, ...PARTNERS];
 
 export default function LogoTicker() {
   return (
-    <section aria-label="Partnereink" className="bg-petrol py-12 text-white md:py-16">
+    <section aria-label="Partnereink" className="bg-petrol py-6 text-white md:py-8">
       <div className="group relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
         <ul className="flex w-max items-center animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
-          {[...ROW, ...ROW].map(({ name, Logo }, i) => (
+          {[...PARTNERS, ...PARTNERS].map(({ name, src, h }, i) => (
             <li key={i} aria-hidden={i >= PARTNERS.length} className="shrink-0 px-10 opacity-90 md:px-16">
-              <span className="sr-only">{name}</span>
-              <Logo />
+              <img src={src} alt={i < PARTNERS.length ? name : ""} className={`${h} w-auto brightness-0 invert`} />
             </li>
           ))}
         </ul>

@@ -75,13 +75,17 @@ const TeachIcon = icon(
   </>,
 );
 
+// Fő szolgáltatás: kiemelt blokkban a többi kártya fölött.
+// TODO: a feladatlistát Balázs pontosítsa (most általános IBF-feladatok).
+const IBF_TASKS = [
+  "Információbiztonsági szabályzatok elkészítése és karbantartása",
+  "Kockázatelemzés és biztonsági osztályba sorolás",
+  "Kapcsolattartás a hatósággal, auditokra felkészítés",
+  "Incidenskezelés támogatása és munkatársi tudatossági oktatás",
+];
+
 // Tartalom: szó szerint a régi cyberbeaver.hu-ról (sorrend is), a helyesírási hibák javítva.
 const SERVICES = [
-  {
-    title: "Információbiztonsági felelős",
-    text: "Kiszervezett információbiztonsági felelősként (IBF) elvégzem a kapcsolódó feladatokat, biztosítom a megfelelőséget. Havidíjas alapon, megbízhatóan, szakszerűen.",
-    Icon: ShieldIcon,
-  },
   {
     title: "NIS2 felkészítés",
     text: "Teljeskörű NIS2 felkészítés a gap elemzéstől a megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már együtt NIS2 megfelelőségen, továbbá végeztem NIS2 auditokat is. A felkészítés során figyelembe veszem az adott cég sajátosságait és az auditori elvárásokat, módszertanokat is.",
@@ -135,11 +139,54 @@ export default function Services() {
           /*eyebrow="Miben tudok segíteni?"*/
           /*title="A megfelelésen túl"*/
           title="Miben tudok segíteni?"
-          intro="Információbiztonsági tanácsadás, audit felkészítés, folyamatok és szabályzatok kialakítása, kockázat- és érettségvizsgálat."
+          //intro="Információbiztonsági tanácsadás, audit felkészítés, folyamatok és szabályzatok kialakítása, kockázat- és érettségvizsgálat."
         />
 
+        {/* Kiemelt fő szolgáltatás: kiszervezett IBF */}
+        <article className="mt-14 grid gap-10 rounded-3xl bg-petrol-deep p-6 text-white sm:p-8 md:grid-cols-[1.1fr_1fr] md:p-12">
+          <div className="min-w-0">
+            <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
+              <ShieldIcon />
+            </span>
+            <h3 className="mt-6 text-2xl font-bold md:text-3xl">Kiszervezett információbiztonsági felelős</h3>
+            <p className="mt-6 text-lg text-white/80">
+              Kiszervezett információbiztonsági felelősként (IBF) elvégzem a kapcsolódó feladatokat, biztosítom a
+              megfelelőséget. <strong className="font-semibold text-lime">Havidíjas alapon</strong>, megbízhatóan,
+              szakszerűen.
+            </p>
+            <a
+              href="#kapcsolat"
+              className="mt-8 inline-block w-full rounded-full bg-lime px-10 py-4 text-center font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
+            >
+              Kérjen ajánlatot
+            </a>
+          </div>
+
+          <ul className="space-y-4 self-center">
+            {IBF_TASKS.map((task) => (
+              <li key={task} className="flex gap-3 text-white/90">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="mt-0.5 size-6 shrink-0 text-lime"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m5 12 5 5L20 7" />
+                </svg>
+                {task}
+              </li>
+            ))}
+          </ul>
+        </article>
+
+        <h3 className="mt-16 text-xl font-semibold">További szolgáltatások</h3>
+
         {/* items-start: a lenyitott kártya egyedül nő, a sor többi kártyája nem nyúlik vele */}
-        <ul className="mt-14 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-6 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(({ title, text, Icon }) => (
             <li
               key={title}
