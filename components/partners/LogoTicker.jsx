@@ -7,7 +7,7 @@ const PARTNERS = [
   { name: "Middle East Privacy", src: "/companies/Logo_white-1.svg", h: "h-8" },
   { name: "Premier Energy", src: "/companies/PE-Group-color.svg", h: "h-8" },
   { name: "MB Energy", src: "/companies/Signet.svg", h: "h-7" },
-  { name: "BTS", src: "/companies/bts-logo-white.png", h: "h-16" },
+  { name: "ISBM", src: "/companies/isbm-logo-transparent.png", h: "h-14" },
   { name: "Cybershield Consulting", src: "/companies/logo-1.svg", h: "h-14" },
   { name: "Lotus Therme Hotel & Spa", src: "/companies/logo-30-white.png", h: "h-16" },
   { name: "Yigsoft", src: "/companies/logo_1.png", h: "h-9" },

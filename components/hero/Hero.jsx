@@ -34,9 +34,7 @@ export default function Hero() {
           {/* SEO fő kulcsszó: "kiszervezett információbiztonsági felelős" → H1 + title */}
           <h1 className="text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
             <span className="whitespace-nowrap text-lime">
-              <Bracket side="left" />
               Kiszervezett
-              <Bracket side="right" />
             </span>
             <br />
             információbiztonsági felelős
@@ -57,8 +55,13 @@ export default function Hero() {
           </div>
 
           <ul className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-white/55">
+            {/* #szolgaltatasok: a Szolgáltatások szekció */}
             {SERVICES.map((s) => (
-              <li key={s}>{s}</li>
+              <li key={s}>
+                <a href="#szolgaltatasok" className="transition hover:text-lime">
+                  {s}
+                </a>
+              </li>
             ))}
           </ul>
         </div>

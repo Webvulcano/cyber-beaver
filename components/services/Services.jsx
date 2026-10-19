@@ -38,12 +38,6 @@ const BankIcon = icon(
     <path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" />
   </>,
 );
-const GearIcon = icon(
-  <>
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 2v3M12 19v3M4.9 4.9 7 7M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" />
-  </>,
-);
 const LockIcon = icon(
   <>
     <rect x="5" y="11" width="14" height="10" rx="2" />
@@ -60,6 +54,20 @@ const LinkIcon = icon(
   <>
     <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
     <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
+  </>,
+);
+const CarIcon = icon(
+  <>
+    <path d="M5 17H3v-5l2-5h14l2 5v5h-2" />
+    <path d="M3 12h18M9 17h6" />
+    <circle cx="7" cy="17" r="2" />
+    <circle cx="17" cy="17" r="2" />
+  </>,
+);
+const AuditIcon = icon(
+  <>
+    <rect x="5" y="4" width="14" height="17" rx="2" />
+    <path d="M9 4V3h6v1M9 13l2 2 4-4" />
   </>,
 );
 const SearchIcon = icon(
@@ -92,6 +100,17 @@ const SERVICES = [
     Icon: ChecklistIcon,
   },
   {
+    // TODO: szöveg később (Balázstól)
+    title: "NIS2 audit támogatás",
+    text: "Példa szöveg",
+    Icon: AuditIcon,
+  },
+  {
+    title: "OT Biztonsági felelős",
+    text: "Példa szöveg",
+    Icon: ChartIcon,
+  },
+  {
     title: "DORA és MNB megfelelőség",
     text: "A hazai bankszektor nagy részével dolgoztam már együtt törvényi megfelelőségi projekteken. Az elmúlt évek tapasztalatát felhasználva hatékonyan és célorientáltan tudok DORA vagy egyéb MNB megfelelőségben segíteni.",
     Icon: BankIcon,
@@ -109,12 +128,7 @@ const SERVICES = [
   {
     title: "TISAX tanácsadás és felkészítés",
     text: "Több ügyfelemet is segítettem már sikeres TISAX minősítés elérésben. Hatékony, gyors, a TISAX elvárásainak megfelelő és praktikus TISAX felkészítést vállalok.",
-    Icon: GearIcon,
-  },
-  {
-    title: "Információbiztonsági kockázatelemzés",
-    text: "Praktikus, a gyakorlatban is jól használható, az adott vállalatra szabott kockázatelemzést végzek, amely megfelel a törvényi elvárásoknak vagy iparági keretrendszereknek is.",
-    Icon: ChartIcon,
+    Icon: CarIcon,
   },
   {
     title: "Harmadik felek kockázatkezelés (TPRM)",
@@ -204,11 +218,6 @@ export default function Services() {
           ))}
         </ul>
 
-        <p className="mt-10 text-sm text-petrol/60">
-          Amit nem tudok megcsinálni, arra pedig ismerek egy szakértőt, legyen
-          az betörésteszt, csalásfelderítés, CTI vagy éppen technikai
-          sérülékenységvizsgálat.
-        </p>
       </div>
     </section>
   );

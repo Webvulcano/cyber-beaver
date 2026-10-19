@@ -90,7 +90,8 @@ export default function References() {
   const edge = "px-4 xl:px-[calc((100vw-72rem)/2+1rem)]";
 
   return (
-    <section id="referenciak" className="bg-mist py-24 text-petrol-deep md:py-32">
+    <section id="referenciak" className="bg-mist pb-24 text-petrol-deep md:pb-32">
+      {/* nincs felső padding: a Szolgáltatások (szintén bg-mist) alsó paddingje adja a rést */}
       <Carousel
         edgeClass={edge}
         scrollPadClass="scroll-px-4 xl:scroll-px-[calc((100vw-72rem)/2+1rem)]"
