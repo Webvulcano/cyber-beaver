@@ -1,6 +1,5 @@
+import { getCms } from "@/lib/cms";
 import RiskGrid from "./RiskGrid";
-
-const SERVICES = ["NIS2 felkészítés", "DORA / MNB", "TISAX", "GDPR", "Kockázatelemzés", "IT audit"];
 
 function Bracket({ side }) {
   return (
@@ -13,7 +12,10 @@ function Bracket({ side }) {
   );
 }
 
-export default function Hero() {
+export default async function Hero() {
+  const cms = await getCms();
+  const services = cms.list("home.hero.services");
+
   return (
     <section className="relative isolate flex min-h-svh items-center overflow-hidden bg-petrol text-white">
       <RiskGrid />
@@ -29,19 +31,21 @@ export default function Hero() {
 
       <div className="mx-auto w-full max-w-5xl px-4 py-24 text-center">
         <div className="mx-auto w-fit max-w-full">
-          <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Cyber Beaver Kft.</p>
+          <p className="mb-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60" {...cms.attr("home.hero.company")}>
+            {cms.text("home.hero.company")}
+          </p>
 
           {/* SEO fő kulcsszó: "kiszervezett információbiztonsági felelős" → H1 + title */}
           <h1 className="text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
-            <span className="whitespace-nowrap text-lime">
-              Kiszervezett
+            <span className="whitespace-nowrap text-lime" {...cms.attr("home.hero.title_highlight")}>
+              {cms.text("home.hero.title_highlight")}
             </span>
             <br />
-            információbiztonsági felelős
+            <span {...cms.attr("home.hero.title")}>{cms.text("home.hero.title")}</span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg text-white/80 md:text-xl">
-            Információbiztonsági tanácsadás, felkészítés és audit
+          <p className="mx-auto mt-8 max-w-2xl text-lg text-white/80 md:text-xl" {...cms.attr("home.hero.subtitle")}>
+            {cms.text("home.hero.subtitle")}
           </p>
 
           <div className="mt-10 flex justify-center">
@@ -49,17 +53,18 @@ export default function Hero() {
             <a
               href="#kapcsolat"
               className="w-full rounded-full bg-lime px-10 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
+              {...cms.attr("home.hero.cta")}
             >
-              Kapcsolat
+              {cms.text("home.hero.cta")}
             </a>
           </div>
 
           <ul className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-white/55">
             {/* #szolgaltatasok: a Szolgáltatások szekció */}
-            {SERVICES.map((s) => (
-              <li key={s}>
-                <a href="#szolgaltatasok" className="transition hover:text-lime">
-                  {s}
+            {services.map((s, i) => (
+              <li key={i}>
+                <a href="#szolgaltatasok" className="transition hover:text-lime" {...cms.attr("home.hero.services", i, "label")}>
+                  {s.label}
                 </a>
               </li>
             ))}

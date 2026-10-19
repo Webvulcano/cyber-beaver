@@ -4,7 +4,8 @@
 // tartalommagasságra nyit, bármilyen hosszú szövegnél). A szöveg mindig a DOM-ban van (SEO).
 import { useId, useState } from "react";
 
-export default function Details({ children }) {
+// textAttrs: CMS szerkesztő data-attribútumok a szövegre (cms.attr)
+export default function Details({ children, textAttrs }) {
   const [open, setOpen] = useState(false);
   const id = useId();
 
@@ -39,7 +40,7 @@ export default function Details({ children }) {
         }`}
       >
         <div className="overflow-hidden">
-          <p className="pt-3 text-petrol/70">{children}</p>
+          <p className="pt-3 text-petrol/70" {...textAttrs}>{children}</p>
         </div>
       </div>
     </div>

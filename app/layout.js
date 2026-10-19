@@ -1,4 +1,6 @@
 import { Figtree } from "next/font/google";
+import CmsBridge from "@/components/cms/CmsBridge";
+import { getCms } from "@/lib/cms";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -6,16 +8,22 @@ const figtree = Figtree({
   subsets: ["latin", "latin-ext"],
 });
 
-export const metadata = {
-  title: "Kiszervezett információbiztonsági felelős | Cyber Beaver",
-  description:
-    "Kiszervezett információbiztonsági felelős havidíjas alapon, Big4-os tapasztalattal. NIS2 és DORA felkészítés, TISAX, kockázatelemzés és IT audit.",
-};
+// Title + description az Ügyfél Adminból (Google-megjelenés szekció).
+export async function generateMetadata() {
+  const cms = await getCms();
+  return {
+    title: cms.text("home.seo.title"),
+    description: cms.text("home.seo.description"),
+  };
+}
 
 export default function RootLayout({ children }) {
   return (
     <html lang="hu" className={`${figtree.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <CmsBridge />
+      </body>
     </html>
   );
 }

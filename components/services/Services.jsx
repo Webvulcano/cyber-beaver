@@ -1,4 +1,6 @@
 import SectionHeading from "@/components/SectionHeading";
+import RichText from "@/components/cms/RichText";
+import { getCms } from "@/lib/cms";
 import Details from "./Details";
 
 // Ikonok: 24×24, 2px round stroke, egységes stílus.
@@ -83,66 +85,15 @@ const TeachIcon = icon(
   </>,
 );
 
-// Fő szolgáltatás: kiemelt blokkban a többi kártya fölött.
-// TODO: a feladatlistát Balázs pontosítsa (most általános IBF-feladatok).
-const IBF_TASKS = [
-  "Információbiztonsági szabályzatok elkészítése és karbantartása",
-  "Kockázatelemzés és biztonsági osztályba sorolás",
-  "Kapcsolattartás a hatósággal, auditokra felkészítés",
-  "Incidenskezelés támogatása és munkatársi tudatossági oktatás",
-];
+// A szövegek az Ügyfél Adminból jönnek (alapérték: content/site.js).
+// Kártya-ikonok sorrend szerint; ha az adminban új kártya kerül a végére, az ShieldIcon-t kap.
+const ICONS = [ChecklistIcon, AuditIcon, BankIcon, TeachIcon, LockIcon, CarIcon, ChartIcon, LinkIcon, SearchIcon];
 
-// Tartalom: szó szerint a régi cyberbeaver.hu-ról (sorrend is), a helyesírási hibák javítva.
-const SERVICES = [
-  {
-    title: "NIS2 felkészítés",
-    text: "Teljeskörű NIS2 felkészítés a gap elemzéstől a megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már együtt NIS2 megfelelőségen, továbbá végeztem NIS2 auditokat is. A felkészítés során figyelembe veszem az adott cég sajátosságait és az auditori elvárásokat, módszertanokat is.",
-    Icon: ChecklistIcon,
-  },
-  {
-    // TODO: szöveg később (Balázstól)
-    title: "NIS2 audit támogatás",
-    text: "Példa szöveg",
-    Icon: AuditIcon,
-  },
-  {
-    title: "OT Biztonsági felelős",
-    text: "Példa szöveg",
-    Icon: ChartIcon,
-  },
-  {
-    title: "DORA és MNB megfelelőség",
-    text: "A hazai bankszektor nagy részével dolgoztam már együtt törvényi megfelelőségi projekteken. Az elmúlt évek tapasztalatát felhasználva hatékonyan és célorientáltan tudok DORA vagy egyéb MNB megfelelőségben segíteni.",
-    Icon: BankIcon,
-  },
-  {
-    title: "Tudatossági oktatás",
-    text: "A tudatossági oktatások nem csak törvényi megfelelőség miatt fontosak, hanem gyakorlati hasznuk is van. Non-profit szervezeteknek, iskoláknak, közintézményeknek limitáltan pro-bono is vállalom oktatás megtartását.",
-    Icon: TeachIcon,
-  },
-  {
-    title: "Adatvédelem",
-    text: "Ki emlékszik már a GDPR-ra?! Pedig az adatvédelem és annak IT oldali elvárásai továbbra is ugyanolyan relevánsak.",
-    Icon: LockIcon,
-  },
-  {
-    title: "TISAX tanácsadás és felkészítés",
-    text: "Több ügyfelemet is segítettem már sikeres TISAX minősítés elérésben. Hatékony, gyors, a TISAX elvárásainak megfelelő és praktikus TISAX felkészítést vállalok.",
-    Icon: CarIcon,
-  },
-  {
-    title: "Harmadik felek kockázatkezelés (TPRM)",
-    text: "Segítek kialakítani egy gyakorlatban is használható, ugyanakkor törvényi elvárásoknak is megfelelő TPRM folyamatot. Igény esetén elvégzem a szállítói auditokat is.",
-    Icon: LinkIcon,
-  },
-  {
-    title: "IT audit",
-    text: "Teljesen vagy részben kiszervezett IT belső ellenőri feladatok ellátása nagyvállalatok, pénzintézetek számára.",
-    Icon: SearchIcon,
-  },
-];
+export default async function Services() {
+  const cms = await getCms();
+  const tasks = cms.list("home.services.ibf_tasks");
+  const items = cms.list("home.services.items");
 
-export default function Services() {
   return (
     <section
       id="szolgaltatasok"
@@ -152,7 +103,8 @@ export default function Services() {
         <SectionHeading
           /*eyebrow="Miben tudok segíteni?"*/
           /*title="A megfelelésen túl"*/
-          title="Miben tudok segíteni?"
+          title={cms.text("home.services.title")}
+          attrs={{ title: cms.attr("home.services.title") }}
           //intro="Információbiztonsági tanácsadás, audit felkészítés, folyamatok és szabályzatok kialakítása, kockázat- és érettségvizsgálat."
         />
 
@@ -162,23 +114,26 @@ export default function Services() {
             <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
               <ShieldIcon />
             </span>
-            <h3 className="mt-6 text-2xl font-bold md:text-3xl">Kiszervezett információbiztonsági felelős</h3>
-            <p className="mt-6 text-lg text-white/80">
-              Kiszervezett információbiztonsági felelősként (IBF) elvégzem a kapcsolódó feladatokat, biztosítom a
-              megfelelőséget. <strong className="font-semibold text-lime">Havidíjas alapon</strong>, megbízhatóan,
-              szakszerűen.
-            </p>
+            <h3 className="mt-6 text-2xl font-bold md:text-3xl" {...cms.attr("home.services.ibf_title")}>
+              {cms.text("home.services.ibf_title")}
+            </h3>
+            <RichText
+              value={cms.rich("home.services.ibf_text")}
+              className="mt-6 text-lg text-white/80 [&_strong]:font-semibold [&_strong]:text-lime"
+              {...cms.attr("home.services.ibf_text")}
+            />
             <a
               href="#kapcsolat"
               className="mt-8 inline-block w-full rounded-full bg-lime px-10 py-4 text-center font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
+              {...cms.attr("home.services.ibf_cta")}
             >
-              Kérjen ajánlatot
+              {cms.text("home.services.ibf_cta")}
             </a>
           </div>
 
           <ul className="space-y-4 self-center">
-            {IBF_TASKS.map((task) => (
-              <li key={task} className="flex gap-3 text-white/90">
+            {tasks.map((task, i) => (
+              <li key={i} className="flex gap-3 text-white/90">
                 <svg
                   viewBox="0 0 24 24"
                   className="mt-0.5 size-6 shrink-0 text-lime"
@@ -191,31 +146,36 @@ export default function Services() {
                 >
                   <path d="m5 12 5 5L20 7" />
                 </svg>
-                {task}
+                <span {...cms.attr("home.services.ibf_tasks", i, "text")}>{task.text}</span>
               </li>
             ))}
           </ul>
         </article>
 
-        <h3 className="mt-16 text-xl font-semibold">További szolgáltatások</h3>
+        <h3 className="mt-16 text-xl font-semibold" {...cms.attr("home.services.others_title")}>
+          {cms.text("home.services.others_title")}
+        </h3>
 
         {/* items-start: a lenyitott kártya egyedül nő, a sor többi kártyája nem nyúlik vele */}
         <ul className="mt-6 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map(({ title, text, Icon }) => (
-            <li
-              key={title}
-              className="rounded-2xl border border-petrol/10 bg-white p-7"
-            >
-              <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
-                <Icon />
-              </span>
-              {/* min 2 sor: így a "Részletek" sor minden kártyán egy vonalban van */}
-              <h3 className="mt-6 min-h-[2.8em] text-xl font-semibold">
-                {title}
-              </h3>
-              <Details>{text}</Details>
-            </li>
-          ))}
+          {items.map(({ title, text }, i) => {
+            const Icon = ICONS[i] ?? ShieldIcon;
+            return (
+              <li
+                key={i}
+                className="rounded-2xl border border-petrol/10 bg-white p-7"
+              >
+                <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
+                  <Icon />
+                </span>
+                {/* min 2 sor: így a "Részletek" sor minden kártyán egy vonalban van */}
+                <h3 className="mt-6 min-h-[2.8em] text-xl font-semibold" {...cms.attr("home.services.items", i, "title")}>
+                  {title}
+                </h3>
+                <Details textAttrs={cms.attr("home.services.items", i, "text")}>{text}</Details>
+              </li>
+            );
+          })}
         </ul>
 
       </div>

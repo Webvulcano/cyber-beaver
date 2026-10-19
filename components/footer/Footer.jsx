@@ -1,12 +1,10 @@
+import { getCms } from "@/lib/cms";
 import ContactForm from "./ContactForm";
 
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja: "Hívj fel" CTA + űrlap) + lime körív,
 // alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
 // pontrács (a hero és a footer keretezi az oldalt); a körív alatt egyszínű petrol-deep. Flat: nincs glow.
 
-const EMAIL = "agardyb@protonmail.com";
-const PHONE = { display: "+36 30 239 24 75", href: "tel:+36302392475" };
-const LINKEDIN = "https://www.linkedin.com/in/balazs-agardy-55802a51/";
 // modul-szinten: Cache Components mellett render közben nem lehet new Date()
 const YEAR = new Date().getFullYear();
 
@@ -14,7 +12,8 @@ const YEAR = new Date().getFullYear();
 const DOT_GRID =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Crect x='13' y='13' width='4' height='4' fill='white' fill-opacity='0.1'/%3E%3C/svg%3E\")";
 
-const COLUMNS = [
+// Elérhetőségek és szövegek az Ügyfél Adminból (alapérték: content/site.js).
+const columns = ({ email, phone, linkedin, address }) => [
   {
     title: "Szolgáltatások",
     links: [
@@ -31,15 +30,15 @@ const COLUMNS = [
       { label: "Szolgáltatások", href: "#szolgaltatasok" },
       { label: "Referenciák", href: "#referenciak" },
       { label: "Kapcsolat", href: "#kapcsolat" },
-      { label: "LinkedIn", href: LINKEDIN, external: true },
+      { label: "LinkedIn", href: linkedin, external: true },
     ],
   },
   {
     title: "Kapcsolat",
-    lines: ["Cyber Beaver Kft.", "Budapest"],
+    lines: address,
     links: [
-      { label: EMAIL, href: `mailto:${EMAIL}` },
-      { label: PHONE.display, href: PHONE.href },
+      { label: email, href: `mailto:${email}` },
+      { label: phone.display, href: phone.href },
     ],
   },
 ];
@@ -92,7 +91,14 @@ function Arc() {
   );
 }
 
-export default function Footer() {
+export default async function Footer() {
+  const cms = await getCms();
+  const EMAIL = cms.text("home.contact_info.email");
+  const display = cms.text("home.contact_info.phone");
+  const PHONE = { display, href: `tel:${display.replace(/[^\d+]/g, "")}` };
+  const LINKEDIN = cms.text("home.contact_info.linkedin");
+  const COLUMNS = columns({ email: EMAIL, phone: PHONE, linkedin: LINKEDIN, address: cms.lines("home.footer.address") });
+
   return (
     <footer
       id="kapcsolat"
@@ -102,10 +108,14 @@ export default function Footer() {
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-24 pb-16 md:pt-32 md:pb-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
         {/* bal: cím + "Hívj fel" CTA + e-mail */}
         <div className="lg:pt-4">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Kapcsolat</p>
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">Kérj ajánlatot vagy egyeztessünk.</h2>
-          <p className="mt-6 text-lg text-white/70">
-            Írd meg röviden, miben segíthetek, és 1 munkanapon belül jelentkezem. Ha sürgős, hívj fel bátran.
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60" {...cms.attr("home.contact.eyebrow")}>
+            {cms.text("home.contact.eyebrow")}
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl" {...cms.attr("home.contact.title")}>
+            {cms.text("home.contact.title")}
+          </h2>
+          <p className="mt-6 text-lg text-white/70" {...cms.attr("home.contact.text")}>
+            {cms.text("home.contact.text")}
           </p>
 
           <a
@@ -113,7 +123,9 @@ export default function Footer() {
             className="mt-10 inline-flex w-full items-center justify-center gap-3 rounded-full bg-lime px-8 py-4 font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
           >
             <PhoneIcon />
-            Hívj fel: {PHONE.display}
+            <span>
+              <span {...cms.attr("home.contact.call_cta")}>{cms.text("home.contact.call_cta")}</span> {PHONE.display}
+            </span>
           </a>
         </div>
 
@@ -129,7 +141,9 @@ export default function Footer() {
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>
         </p>
-        <p className="mt-3 px-4 text-sm italic text-white/50">„Mert csak a legokosabb hód tudja, merre dől a fa.”</p>
+        <p className="mt-3 px-4 text-sm italic text-white/50" {...cms.attr("home.footer.quote")}>
+          {cms.text("home.footer.quote")}
+        </p>
         <ul className="mt-6 flex justify-center gap-6 text-lime">
           <li>
             <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white">
@@ -167,8 +181,8 @@ export default function Footer() {
                       </a>
                     </li>
                   ))}
-                  {lines?.map((line) => (
-                    <li key={line}>{line}</li>
+                  {lines?.map((line, i) => (
+                    <li key={i} {...(i === 0 && cms.attr("home.footer.address"))}>{line}</li>
                   ))}
                 </ul>
               </div>
@@ -179,7 +193,7 @@ export default function Footer() {
 
       {/* legalsó sáv: copyright */}
       <div className="border-t border-white/10 bg-petrol-deep px-4 py-4 text-center text-sm text-white/40">
-        © {YEAR} Cyber Beaver Kft. Minden jog fenntartva.
+        © {YEAR} <span {...cms.attr("home.footer.rights")}>{cms.text("home.footer.rights")}</span>
       </div>
     </footer>
   );

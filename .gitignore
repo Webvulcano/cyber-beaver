@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CMS: ügyfél Google-fiókjai (sync-manifest olvassa), soha ne menjen gitbe
+cms.members.local.json
+!.env.example

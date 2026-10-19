@@ -1,3 +1,6 @@
+import { getCms } from "@/lib/cms";
+import RichText from "@/components/cms/RichText";
+
 // Tartalom: a régi cyberbeaver.hu bemutatkozó szövege alapján.
 // Minősítések: zemitis.hu "Rólunk" szekció alapján.
 const FACTS = [
@@ -6,32 +9,33 @@ const FACTS = [
   { value: "CIPM", label: "Certified Information Privacy Manager", logo: "/minositesek/tanusitvany1.png", href: "https://iapp.org/certify/cipm" },
 ];
 
-export default function About() {
+export default async function About() {
+  const cms = await getCms();
+
   return (
     <section id="rolam" className="overflow-hidden bg-petrol-deep text-white">
       <div className="mx-auto grid max-w-6xl items-center gap-12 md:items-start px-4 py-24 md:grid-cols-[auto_1fr] md:gap-16 md:py-32">
         <div>
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">Rólam</p>
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60" {...cms.attr("home.about.eyebrow")}>
+            {cms.text("home.about.eyebrow")}
+          </p>
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Agárdy Balázs vagyok, <span className="text-lime">szabadúszó információbiztonsági tanácsadó.</span>
+            <span {...cms.attr("home.about.title")}>{cms.text("home.about.title")}</span>{" "}
+            <span className="text-lime" {...cms.attr("home.about.title_highlight")}>
+              {cms.text("home.about.title_highlight")}
+            </span>
           </h2>
 
-          <div className="mt-8 max-w-2xl space-y-5 text-lg text-white/80">
-            <p>
-              Több mint 
-              <strong className="font-semibold text-white"> 10+ évet dolgoztam a Big4-ban információbiztonság, adatvédelem és IT audit területen. </strong>
-              Aztán úgy döntöttem, hogy szabadabban, rugalmasabb formában szeretném támogatni az ügyfeleimet.
-            </p>
-            <p>
-              A nagyvállalati kötöttségeket elengedve 2025-ben megalapítottam a Cyber Beaver-t, ahol a{" "}
-              <strong className="font-semibold text-white">
-                Big4-os precizitást és munkakultúrát ötvözöm a kisvállalkozások gyorsaságával és közvetlenségével.
-              </strong>
-            </p>
-          </div>
+          <RichText
+            value={cms.rich("home.about.body")}
+            className="mt-8 max-w-2xl space-y-5 text-lg text-white/80 [&_strong]:font-semibold [&_strong]:text-white"
+            {...cms.attr("home.about.body")}
+          />
 
-          <h3 className="mt-12 border-t border-white/15 pt-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60">
-            Tanusítványok
+          <h3 className="mt-12 border-t border-white/15 pt-8 text-sm font-semibold uppercase tracking-[0.2em] text-white/60"
+            {...cms.attr("home.about.certs_title")}
+          >
+            {cms.text("home.about.certs_title")}
           </h3>
           <dl className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-3">
             {FACTS.map(({ value, label, logo, href }) => {
