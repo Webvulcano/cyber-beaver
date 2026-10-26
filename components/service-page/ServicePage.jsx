@@ -19,7 +19,8 @@ const ALL_SERVICES = "/#szolgaltatasok";
 
 export async function serviceMetadata(key) {
   const cms = await getCms();
-  const { path } = servicePageByKey(key).content;
+  const page = servicePageByKey(key);
+  const { path } = page.content;
   const title = cms.text(`${key}.seo.title`);
   const description = cms.text(`${key}.seo.description`);
   return {
@@ -27,6 +28,8 @@ export async function serviceMetadata(key) {
     description,
     alternates: { canonical: path },
     openGraph: { type: "website", locale: "hu_HU", siteName: "Cyber Beaver", url: path, title, description },
+    // jóváhagyásig (published: false) ne indexelje a Google
+    ...(!page.published && { robots: { index: false, follow: false } }),
   };
 }
 

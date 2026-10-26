@@ -1,7 +1,7 @@
 import SectionHeading from "@/components/SectionHeading";
 import RichText from "@/components/cms/RichText";
 import { getCms } from "@/lib/cms";
-import { servicePageByIcon, servicePageByKey } from "@/content/pages";
+import { publishedPath, servicePageByIcon } from "@/content/pages";
 import Details from "./Details";
 import { ICONS, ShieldIcon } from "@/components/icons";
 
@@ -11,6 +11,7 @@ export default async function Services() {
   const cms = await getCms();
   const tasks = cms.list("home.services.ibf_tasks");
   const items = cms.list("home.services.items");
+  const ibfPath = publishedPath("ibf");
 
   return (
     <section
@@ -48,14 +49,16 @@ export default async function Services() {
               >
                 {cms.text("home.services.ibf_cta")}
               </a>
-              {/* belső link az IBF-aloldalra (SEO + aki többet olvasna) */}
-              <a
-                href={servicePageByKey("ibf").content.path}
-                className="py-2 text-center font-semibold text-lime underline-offset-4 hover:underline sm:text-left"
-                {...cms.attr("home.services.ibf_more")}
-              >
-                {cms.text("home.services.ibf_more")}
-              </a>
+              {/* belső link az IBF-aloldalra (SEO + aki többet olvasna) — csak ha publikus (content/pages) */}
+              {ibfPath && (
+                <a
+                  href={ibfPath}
+                  className="py-2 text-center font-semibold text-lime underline-offset-4 hover:underline sm:text-left"
+                  {...cms.attr("home.services.ibf_more")}
+                >
+                  {cms.text("home.services.ibf_more")}
+                </a>
+              )}
             </div>
           </div>
 

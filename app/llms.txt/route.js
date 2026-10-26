@@ -1,5 +1,5 @@
 import { COMPANY, SITE_URL } from "@/content/site";
-import { SERVICE_PAGES } from "@/content/pages";
+import { PUBLISHED_PAGES } from "@/content/pages";
 import { getCms, splitLines } from "@/lib/cms";
 
 // /llms.txt (llmstxt.org): tömör, markdown összefoglaló az AI-keresőknek / LLM-eknek.
@@ -24,7 +24,7 @@ export async function GET() {
   });
 
   // Szolgáltatás-aloldalak: leírás + GYIK (az AI-keresők kérdés–válasz párokat idéznek)
-  const pages = SERVICE_PAGES.flatMap(({ key, content }) => {
+  const pages = PUBLISHED_PAGES.flatMap(({ key, content }) => {
     const faq = cms.list(`${key}.faq.items`).filter((f) => f.question?.trim() && f.answer?.trim());
     return [
       `## ${cms.text(`${key}.hero.title`)}`,
@@ -82,7 +82,7 @@ export async function GET() {
     "## Oldalak",
     "",
     `- [Főoldal](${SITE_URL}/): szolgáltatások, bemutatkozás, referenciák, kapcsolat`,
-    ...SERVICE_PAGES.map(({ key, content }) => `- [${cms.text(`${key}.hero.title`)}](${SITE_URL}${content.path}): ${cms.text(`${key}.seo.description`)}`),
+    ...PUBLISHED_PAGES.map(({ key, content }) => `- [${cms.text(`${key}.hero.title`)}](${SITE_URL}${content.path}): ${cms.text(`${key}.seo.description`)}`),
     `- [Impresszum](${SITE_URL}/impresszum): cégadatok`,
     `- [Adatkezelési tájékoztató](${SITE_URL}/adatkezeles)`,
     "",

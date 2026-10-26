@@ -1,7 +1,7 @@
 import { getCms } from "@/lib/cms";
 import ContactForm from "./ContactForm";
 import { LegalBar } from "@/components/legal/LegalPage";
-import { servicePageByKey } from "@/content/pages";
+import { publishedPath } from "@/content/pages";
 
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja: "Hívj fel" CTA + űrlap) + lime körív,
 // alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
@@ -17,10 +17,10 @@ const columns = ({ email, phone, linkedin, address }) => [
     title: "Szolgáltatások",
     links: [
       // aloldal, ha van; különben a főoldali szolgáltatás-szekció ("/#…", hogy aloldalról is működjön)
-      { label: "Információbiztonsági felelős", href: servicePageByKey("ibf").content.path },
+      { label: "Információbiztonsági felelős", href: publishedPath("ibf") ?? "/#szolgaltatasok" },
       { label: "NIS2 felkészítés", href: "/#szolgaltatasok" },
       { label: "DORA és MNB", href: "/#szolgaltatasok" },
-      { label: "TISAX", href: servicePageByKey("tisax").content.path },
+      { label: "TISAX", href: publishedPath("tisax") ?? "/#szolgaltatasok" },
       { label: "IT audit", href: "/#szolgaltatasok" },
     ],
   },

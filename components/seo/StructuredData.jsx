@@ -1,6 +1,6 @@
 import JsonLd from "@/components/cms/JsonLd";
 import { COMPANY, SITE_URL } from "@/content/site";
-import { servicePageByKey } from "@/content/pages";
+import { publishedPath } from "@/content/pages";
 import { getCms } from "@/lib/cms";
 import { ORG_ID, orgNode, personNode, serviceNode } from "@/lib/schema";
 
@@ -21,7 +21,7 @@ export default async function StructuredData() {
             offer(
               cms.text("home.services.ibf_title"),
               cms.text("home.services.ibf_text"),
-              `${SITE_URL}${servicePageByKey("ibf").content.path}`,
+              publishedPath("ibf") && `${SITE_URL}${publishedPath("ibf")}`,
             ),
             ...cms.list("home.services.items").map(({ title, text }) => offer(title, text)),
           ],
