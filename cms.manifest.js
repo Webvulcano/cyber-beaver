@@ -98,8 +98,8 @@ const manifest = {
   site: {
     slug: "cyber-beaver",
     name: "Cyber Beaver",
-    // Most a Vercel-deploy; saját domain (cyberbeaver.hu) bekötésekor ide + sync.
-    url: "https://cyber-beaver.vercel.app",
+    // Saját domain (2026-10-26-tól); revalidate ide megy → admin-mentés frissíti az éles oldalt.
+    url: "https://cyberbeaver.hu",
     revalidatePath: "/api/revalidate",
   },
   locales: [{ code: "hu", label: "Magyar" }],

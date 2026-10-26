@@ -17,9 +17,14 @@ const nextConfig = {
       },
     },
   },
-  // A régi WordPress-oldal (cyberbeaver.hu) URL-jei → 301, hogy a meglévő linkek/indexelés ne vesszenek el.
   async redirects() {
+    // /admin → a központi Ügyfél Adminra (redirect, nem proxy → a login az admin saját domainjén fut).
+    const dashboard = (process.env.DASHBOARD_URL || "https://analytics.webvulcano.hu").replace(/\/+$/, "");
+    const slug = process.env.CMS_SITE_SLUG || "cyber-beaver";
     return [
+      { source: "/admin", destination: `${dashboard}/${slug}`, permanent: false },
+      { source: "/admin/:path*", destination: `${dashboard}/${slug}/:path*`, permanent: false },
+      // A régi WordPress-oldal (cyberbeaver.hu) URL-jei → 301, hogy a meglévő linkek/indexelés ne vesszenek el.
       { source: "/about", destination: "/#rolam", statusCode: 301 },
       { source: "/:year(\\d{4})/:month(\\d{2})/:day(\\d{2})/:slug", destination: "/", statusCode: 301 },
       { source: "/feed", destination: "/", statusCode: 301 },
