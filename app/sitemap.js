@@ -1,11 +1,9 @@
 import { SITE_URL } from "@/content/site";
 
-// Új oldalnál (pl. IBF-aloldal) ide is felvenni.
+// Új indexelendő oldalnál (pl. IBF-aloldal) ide is felvenni. A jogi oldalak noindex-esek, ezért nincsenek itt.
 export default function sitemap() {
   const lastModified = new Date();
   return [
     { url: `${SITE_URL}/`, lastModified, changeFrequency: "monthly", priority: 1 },
-    { url: `${SITE_URL}/impresszum`, lastModified, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${SITE_URL}/adatkezeles`, lastModified, changeFrequency: "yearly", priority: 0.2 },
   ];
 }
