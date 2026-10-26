@@ -2,6 +2,7 @@ import { Figtree } from "next/font/google";
 import SiteAnalytics from "@/components/analytics/SiteAnalytics";
 import CmsBridge from "@/components/cms/CmsBridge";
 import { getCms } from "@/lib/cms";
+import { SITE_URL } from "@/content/site";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -13,6 +14,8 @@ const figtree = Figtree({
 export async function generateMetadata() {
   const cms = await getCms();
   return {
+    // Abszolút URL-ek (canonical, OG) alapja. Canonical oldalanként, hogy az aloldalak ne örököljék a "/"-t.
+    metadataBase: new URL(SITE_URL),
     title: cms.text("home.seo.title"),
     description: cms.text("home.seo.description"),
   };

@@ -177,3 +177,20 @@ export const FOOTER = {
   addressLines: ["Cyber Beaver Kft.", "Budapest"],
   rights: "Cyber Beaver Kft. Minden jog fenntartva.",
 };
+
+// Kanonikus domain (canonical, sitemap, robots, JSON-LD). Élesítés előtt a Vercel-deploy is erre mutat.
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://cyberbeaver.hu").replace(/\/$/, "");
+
+// Cégadatok a strukturált adathoz (JSON-LD) — az impresszummal egyezően, nem CMS-mező.
+export const COMPANY = {
+  name: "Cyber Beaver",
+  legalName: "Cyber Beaver Korlátolt Felelősségű Társaság",
+  taxId: "32899359-2-43",
+  foundingDate: "2025",
+  address: { street: "Gyula vezér út 55. 1. ajtó", postalCode: "1223", city: "Budapest", country: "HU" },
+  founder: "Agárdy Balázs",
+  founderTitle: "Információbiztonsági tanácsadó, ügyvezető",
+  slogan: "Mert csak a legokosabb hód tudja, merre dől a fa.",
+  knowsAbout: ["NIS2", "DORA", "MNB ajánlások", "TISAX", "GDPR", "ISO/IEC 27001", "Információbiztonsági kockázatelemzés", "IT audit", "Harmadik felek kockázatkezelése (TPRM)"],
+  credentials: [{ name: "CIPM — Certified Information Privacy Manager", issuer: "IAPP", url: "https://iapp.org/certify/cipm" }],
+};
