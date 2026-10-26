@@ -10,13 +10,13 @@ export default function Details({ children, textAttrs }) {
   const id = useId();
 
   return (
-    <div className="mt-5 border-t border-petrol/10 pt-4">
+    <div className="mt-4 border-t border-petrol/10 pt-1 sm:mt-5 sm:pt-2">
       <button
         type="button"
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full cursor-pointer items-center justify-between font-semibold text-petrol"
+        className="flex w-full cursor-pointer items-center justify-between py-2.5 font-semibold text-petrol"
       >
         Részletek
         <svg

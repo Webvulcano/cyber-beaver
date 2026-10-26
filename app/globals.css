@@ -66,6 +66,14 @@ html {
   }
 }
 
+/* Hosszú magyar szavak ("információbiztonsági") keskeny mobilon se lógjanak ki: csak akkor tör szót,
+   ha az egész szó nem fér el a sorban. */
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

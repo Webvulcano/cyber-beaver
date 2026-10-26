@@ -107,7 +107,7 @@ export default async function Services() {
   return (
     <section
       id="szolgaltatasok"
-      className="bg-mist py-24 text-petrol-deep md:py-32"
+      className="bg-mist py-20 text-petrol-deep md:py-32"
     >
       <div className="mx-auto max-w-6xl px-4">
         <SectionHeading
@@ -119,12 +119,12 @@ export default async function Services() {
         />
 
         {/* Kiemelt fő szolgáltatás: kiszervezett IBF */}
-        <article className="mt-14 grid gap-10 rounded-3xl bg-petrol-deep p-6 text-white sm:p-8 md:grid-cols-[1.1fr_1fr] md:p-12">
+        <article className="mt-10 grid md:mt-14 gap-10 rounded-3xl bg-petrol-deep p-5 text-white sm:p-8 md:grid-cols-[1.1fr_1fr] md:p-12">
           <div className="min-w-0">
             <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
               <ShieldIcon />
             </span>
-            <h3 className="mt-6 text-2xl font-bold md:text-3xl" {...cms.attr("home.services.ibf_title")}>
+            <h3 className="mt-6 text-xl font-bold sm:text-2xl md:text-3xl" {...cms.attr("home.services.ibf_title")}>
               {cms.text("home.services.ibf_title")}
             </h3>
             <RichText
@@ -167,21 +167,24 @@ export default async function Services() {
         </h3>
 
         {/* items-start: a lenyitott kártya egyedül nő, a sor többi kártyája nem nyúlik vele */}
-        <ul className="mt-6 grid items-start gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-6 grid items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {items.map(({ icon, title, text }, i) => {
             const Icon = ICONS[icon] ?? ShieldIcon;
             return (
               <li
                 key={i}
-                className="rounded-2xl border border-petrol/10 bg-white p-7"
+                className="rounded-2xl border border-petrol/10 bg-white px-5 pt-5 pb-2 sm:p-7"
               >
-                <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
-                  <Icon />
-                </span>
-                {/* min 2 sor: így a "Részletek" sor minden kártyán egy vonalban van */}
-                <h3 className="mt-6 min-h-[2.8em] text-xl font-semibold" {...cms.attr("home.services.items", i, "title")}>
-                  {title}
-                </h3>
+                {/* mobilon ikon + cím egy sorban (rövidebb kártya), sm-től egymás alatt */}
+                <div className="flex items-center gap-4 sm:block">
+                  <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-lime text-petrol-deep">
+                    <Icon />
+                  </span>
+                  {/* min 2 sor (sm-től, rácsban): így a "Részletek" sor minden kártyán egy vonalban van */}
+                  <h3 className="text-xl font-semibold sm:mt-6 sm:min-h-[2.8em]" {...cms.attr("home.services.items", i, "title")}>
+                    {title}
+                  </h3>
+                </div>
                 <Details textAttrs={cms.attr("home.services.items", i, "text")}>{text}</Details>
               </li>
             );

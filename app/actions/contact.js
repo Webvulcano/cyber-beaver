@@ -1,7 +1,8 @@
 "use server";
 
-// Kapcsolat-űrlap: validálás + szerver-napló. E-mail küldés MÉG NINCS bekötve (demo) —
-// TODO: e-mail szolgáltató bekötése élesítés előtt (addig a beküldött üzenet csak a szerver logban látszik).
+// Kapcsolat-űrlap: validálás → SimplyForms (ő küldi az értesítő e-mailt).
+// Env: SIMPLYFORMS_FORM_ID (publikus form ID, API key nem kell). Amíg nincs megadva, a Footer
+// az űrlap helyett "karbantartás alatt" üzenetet mutat, ide el sem jut kérés.
 
 const clean = (v, max) =>
   String(v ?? "")
@@ -30,16 +31,42 @@ export async function sendContact(_prev, formData) {
     errors.consent = "Az adatkezeléshez hozzá kell járulnod.";
   if (Object.keys(errors).length) return { ok: false, errors, values: data };
 
-  const rows = [
-    ["Név", data.name],
-    ["Cég", data.company],
-    ["E-mail", data.email],
-    ["Telefon", data.phone],
-  ].filter(([, v]) => v);
-  const text = `${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\n${data.message}`;
-
-  console.log(
-    "[kapcsolat-űrlap] új üzenet (e-mail küldés még nincs bekötve):\n" + text,
-  );
+  const sent = await sendToSimplyForms(data);
+  if (!sent) {
+    return {
+      ok: false,
+      values: data,
+      error: "Nem sikerült elküldeni az üzenetet. Próbáld újra, vagy hívj fel telefonon.",
+    };
+  }
   return { ok: true };
+}
+
+async function sendToSimplyForms({ name, company, email, phone, message }) {
+  const formId = process.env.SIMPLYFORMS_FORM_ID;
+  if (!formId) {
+    console.error("[kapcsolat-űrlap] Hiányzó SIMPLYFORMS_FORM_ID");
+    return false;
+  }
+
+  // A kulcsok nevei jelennek meg az értesítő e-mailben
+  const body = new FormData();
+  body.append("subject", `Weboldal üzenet: ${name}${company ? ` (${company})` : ""}`);
+  body.append("Név", name);
+  body.append("Cég", company);
+  body.append("E-mail", email);
+  body.append("Telefon", phone);
+  body.append("Üzenet", message);
+
+  try {
+    const res = await fetch(`https://api.simplyforms.app/v1/forms/${formId}`, { method: "POST", body });
+    if (!res.ok) {
+      console.error("[kapcsolat-űrlap] SimplyForms hiba:", res.status, await res.text());
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("[kapcsolat-űrlap] SimplyForms hiba:", err);
+    return false;
+  }
 }

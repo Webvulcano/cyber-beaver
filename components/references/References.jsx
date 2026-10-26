@@ -17,7 +17,7 @@ const SECTOR = {
 function Card({ index, sector, years, title, client, text, tags, attr }) {
   const { label, Icon } = SECTOR[sector] ?? SECTOR.kkv;
   return (
-    <li className="flex w-[82vw] shrink-0 snap-start flex-col rounded-3xl border border-petrol/10 bg-white p-8 sm:w-[26rem] md:p-10">
+    <li className="flex w-[82vw] shrink-0 snap-start flex-col rounded-3xl border border-petrol/10 bg-white p-6 sm:w-[26rem] sm:p-8 md:p-10">
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 rounded-full bg-mist py-1.5 pr-4 pl-1.5 text-sm font-semibold">
           <span className="flex size-7 items-center justify-center rounded-full bg-lime text-petrol-deep">
@@ -28,8 +28,8 @@ function Card({ index, sector, years, title, client, text, tags, attr }) {
         <span className="text-sm font-semibold text-petrol/40">{String(index + 1).padStart(2, "0")}</span>
       </div>
 
-      <p className="mt-10 text-2xl font-bold text-petrol/30" {...attr("years")}>{years}</p>
-      <h3 className="mt-2 text-xl font-semibold" {...attr("title")}>{title}</h3>
+      <p className="mt-8 text-2xl font-bold sm:mt-10 text-petrol/30" {...attr("years")}>{years}</p>
+      <h3 className="mt-2 text-lg font-semibold sm:text-xl" {...attr("title")}>{title}</h3>
       <p className="mt-1 font-semibold text-petrol/60" {...attr("client")}>{client}</p>
       <p className="mt-5 text-petrol/70" {...attr("text")}>{text}</p>
 
@@ -50,7 +50,7 @@ export default async function References() {
   const edge = "px-4 xl:px-[calc((100vw-72rem)/2+1rem)]";
 
   return (
-    <section id="referenciak" className="bg-mist pb-24 text-petrol-deep md:pb-32">
+    <section id="referenciak" className="bg-mist pb-20 text-petrol-deep md:pb-32">
       {/* nincs felső padding: a Szolgáltatások (szintén bg-mist) alsó paddingje adja a rést */}
       <Carousel
         edgeClass={edge}

@@ -1,12 +1,10 @@
 import { getCms } from "@/lib/cms";
 import ContactForm from "./ContactForm";
+import { LegalBar } from "@/components/legal/LegalPage";
 
 // Footer = Kapcsolat szekció (#kapcsolat, ide visz a hero "Kapcsolat" gombja: "Hívj fel" CTA + űrlap) + lime körív,
 // alatta logó, elérhetőség-ikonok, lime vonal és link-kártyák. A felső rész a hero petrolja + álló
 // pontrács (a hero és a footer keretezi az oldalt); a körív alatt egyszínű petrol-deep. Flat: nincs glow.
-
-// modul-szinten: Cache Components mellett render közben nem lehet new Date()
-const YEAR = new Date().getFullYear();
 
 // Ugyanaz a négyzetes pontrács, mint a hero RiskGrid-jén (30px rács, 4px pötty), csak álló.
 const DOT_GRID =
@@ -105,7 +103,7 @@ export default async function Footer() {
       className="overflow-hidden bg-petrol text-white"
       style={{ backgroundImage: DOT_GRID, backgroundPosition: "center top" }}
     >
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-24 pb-16 md:pt-32 md:pb-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-20 pb-16 md:pt-32 md:pb-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
         {/* bal: cím + "Hívj fel" CTA + e-mail */}
         <div className="lg:pt-4">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60" {...cms.attr("home.contact.eyebrow")}>
@@ -129,7 +127,8 @@ export default async function Footer() {
           </a>
         </div>
 
-        <ContactForm />
+        {/* SimplyForms form ID nélkül nincs hova küldeni → karbantartás-üzenet az űrlap helyén */}
+        <ContactForm enabled={Boolean(process.env.SIMPLYFORMS_FORM_ID)} email={EMAIL} />
       </div>
 
       <Arc />
@@ -144,19 +143,19 @@ export default async function Footer() {
         <p className="mt-3 px-4 text-sm italic text-white/50" {...cms.attr("home.footer.quote")}>
           {cms.text("home.footer.quote")}
         </p>
-        <ul className="mt-6 flex justify-center gap-6 text-lime">
+        <ul className="mt-4 flex justify-center gap-2 text-lime">
           <li>
-            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-white">
+            <a href={LINKEDIN} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="block p-2.5 hover:text-white">
               <LinkedInIcon />
             </a>
           </li>
           <li>
-            <a href={`mailto:${EMAIL}`} aria-label="E-mail" className="hover:text-white">
+            <a href={`mailto:${EMAIL}`} aria-label="E-mail" className="block p-2.5 hover:text-white">
               <MailIcon />
             </a>
           </li>
           <li>
-            <a href={PHONE.href} aria-label="Telefon" className="hover:text-white">
+            <a href={PHONE.href} aria-label="Telefon" className="block p-2.5 hover:text-white">
               <PhoneIcon />
             </a>
           </li>
@@ -169,12 +168,12 @@ export default async function Footer() {
               <div key={title} className="rounded-2xl bg-white/[0.04] p-6">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime">{title}</p>
                 <div className="mt-4 border-t border-white/15" />
-                <ul className="mt-4 space-y-2 text-white/80">
+                <ul className="mt-3 text-white/80">
                   {links?.map(({ label, href, external }) => (
                     <li key={label}>
                       <a
                         href={href}
-                        className="break-all hover:text-lime"
+                        className="inline-block break-all py-1.5 hover:text-lime"
                         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                         {label}
@@ -182,7 +181,7 @@ export default async function Footer() {
                     </li>
                   ))}
                   {lines?.map((line, i) => (
-                    <li key={i} {...(i === 0 && cms.attr("home.footer.address"))}>{line}</li>
+                    <li key={i} className="py-1.5" {...(i === 0 && cms.attr("home.footer.address"))}>{line}</li>
                   ))}
                 </ul>
               </div>
@@ -191,10 +190,8 @@ export default async function Footer() {
         </div>
       </div>
 
-      {/* legalsó sáv: copyright */}
-      <div className="border-t border-white/10 bg-petrol-deep px-4 py-4 text-center text-sm text-white/40">
-        © {YEAR} <span {...cms.attr("home.footer.rights")}>{cms.text("home.footer.rights")}</span>
-      </div>
+      {/* legalsó sáv: copyright + Impresszum / Adatkezelési tájékoztató */}
+      <LegalBar rights={cms.text("home.footer.rights")} rightsAttr={cms.attr("home.footer.rights")} />
     </footer>
   );
 }

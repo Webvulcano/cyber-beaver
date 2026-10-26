@@ -59,11 +59,11 @@ export default async function Hero() {
             </a>
           </div>
 
-          <ul className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium text-white/55">
+          <ul className="mx-auto mt-14 flex max-w-3xl flex-wrap justify-center gap-x-6 text-sm font-medium text-white/55">
             {/* #szolgaltatasok: a Szolgáltatások szekció */}
             {services.map((s, i) => (
               <li key={i}>
-                <a href="#szolgaltatasok" className="transition hover:text-lime" {...cms.attr("home.hero.services", i, "label")}>
+                <a href="#szolgaltatasok" className="inline-block py-2 transition hover:text-lime" {...cms.attr("home.hero.services", i, "label")}>
                   {s.label}
                 </a>
               </li>

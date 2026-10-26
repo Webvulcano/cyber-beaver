@@ -9,22 +9,43 @@ const FACTS = [
   { value: "CIPM", label: "Certified Information Privacy Manager", logo: "/minositesek/tanusitvany1.png", href: "https://iapp.org/certify/cipm" },
 ];
 
+// Kivágott portré lime keretes körbe vágva (a kerek logó visszhangja). Méret/láthatóság: className.
+function Portrait({ className }) {
+  return (
+    <div className={`relative aspect-square shrink-0 overflow-hidden rounded-full border-[3px] border-lime bg-petrol ${className}`}>
+      <img
+        src="/nincshatter3.webp"
+        alt="Agárdy Balázs, a Cyber Beaver alapítója"
+        width={900}
+        height={1703}
+        loading="lazy"
+        className="absolute top-[8%] -left-[18%] h-auto w-[110%] max-w-none"
+      />
+    </div>
+  );
+}
+
 export default async function About() {
   const cms = await getCms();
 
   return (
     <section id="rolam" className="overflow-hidden bg-petrol-deep text-white">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 md:items-start px-4 py-24 md:grid-cols-[auto_1fr] md:gap-16 md:py-32">
-        <div>
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-white/60" {...cms.attr("home.about.eyebrow")}>
-            {cms.text("home.about.eyebrow")}
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            <span {...cms.attr("home.about.title")}>{cms.text("home.about.title")}</span>{" "}
-            <span className="text-lime" {...cms.attr("home.about.title_highlight")}>
-              {cms.text("home.about.title_highlight")}
-            </span>
-          </h2>
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-20 md:grid-cols-[auto_1fr] md:items-start md:gap-10 md:py-32 lg:gap-16">
+        <div className="min-w-0">
+          {/* mobilon: kis portré egy sorban a "Rólam" + név sorral, a kiemelt rész alatta teljes szélességben
+              (a H2 `contents` → a két span külön rácselem lesz). md-től sima blokk, a nagy portré bal oldalt. */}
+          <div className="grid grid-cols-[auto_1fr] items-center gap-x-4 md:block">
+            <Portrait className="row-span-2 w-24 md:hidden" />
+            <p className="mb-1 text-sm font-semibold uppercase tracking-[0.2em] text-white/60 md:mb-4" {...cms.attr("home.about.eyebrow")}>
+              {cms.text("home.about.eyebrow")}
+            </p>
+            <h2 className="contents text-2xl font-bold tracking-tight sm:text-3xl md:block lg:text-4xl">
+              <span {...cms.attr("home.about.title")}>{cms.text("home.about.title")}</span>{" "}
+              <span className="col-span-2 mt-1 text-lime md:mt-0" {...cms.attr("home.about.title_highlight")}>
+                {cms.text("home.about.title_highlight")}
+              </span>
+            </h2>
+          </div>
 
           <RichText
             value={cms.rich("home.about.body")}
@@ -63,17 +84,8 @@ export default async function About() {
           </dl>
         </div>
 
-        {/* kivágott portré lime keretes körbe vágva, desktopon bal oldalt (a kerek logó visszhangja) */}
-        <div className="relative mx-auto aspect-square w-72 overflow-hidden rounded-full border-[3px] border-lime bg-petrol sm:w-80 md:order-first md:w-96">
-          <img
-            src="/nincshatter3.webp"
-            alt="Agárdy Balázs, a Cyber Beaver alapítója"
-            width={900}
-            height={1703}
-            loading="lazy"
-            className="absolute top-[8%] -left-[18%] h-auto w-[110%] max-w-none"
-          />
-        </div>
+        {/* desktopon portré bal oldalt: md-n kisebb, hogy a szövegoszlop elférjen; lg-től nagy (mobilon a fejléc-sorban van a kicsi) */}
+        <Portrait className="order-first hidden w-52 md:block lg:w-80" />
       </div>
     </section>
   );

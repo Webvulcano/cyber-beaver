@@ -6,6 +6,8 @@ const adminOrigins = (process.env.NEXT_PUBLIC_CMS_ADMIN_ORIGIN ?? "")
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Dev: telefonról (LAN IP-ről) is betöltődjön a JS/HMR (csak `next dev`-re hat).
+  allowedDevOrigins: ["192.168.*.*", "10.*.*.*"],
   // cacheComponents (+ partialPrefetching) kikapcsolva: a CMS client-kit (fetch force-cache + tag) ebben a módban nincs tesztelve.
   turbopack: {
     rules: {

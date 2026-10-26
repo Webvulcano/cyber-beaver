@@ -1,6 +1,7 @@
 "use client";
 
-// Kapcsolat-űrlap (server action: app/actions/contact.js). Sikeres küldés után köszönő üzenet.
+// Kapcsolat-űrlap (server action: app/actions/contact.js → SimplyForms). Sikeres küldés után köszönő üzenet.
+// enabled=false (nincs SIMPLYFORMS_FORM_ID): "karbantartás alatt" kártya az űrlap helyett.
 import { useActionState } from "react";
 import { sendContact } from "@/app/actions/contact";
 
@@ -26,36 +27,57 @@ function Error({ id, msg }) {
   ) : null;
 }
 
-export default function ContactForm() {
+function Notice({ icon, title, children, ...props }) {
+  return (
+    <div
+      className="flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-petrol-deep p-8 text-center shadow-2xl md:p-10"
+      {...props}
+    >
+      <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
+        <svg
+          viewBox="0 0 24 24"
+          className="size-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          {icon}
+        </svg>
+      </span>
+      <h3 className="mt-6 text-xl font-semibold">{title}</h3>
+      <p className="mt-3 text-white/70">{children}</p>
+    </div>
+  );
+}
+
+export default function ContactForm({ enabled, email }) {
   const [state, action, pending] = useActionState(sendContact, null);
   const e = state?.errors ?? {};
   const v = state?.values ?? {};
 
+  if (!enabled) {
+    return (
+      <Notice
+        role="status"
+        title="Az űrlap karbantartás alatt"
+        icon={<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6Z" />}
+      >
+        Addig hívj fel bátran, vagy írj e-mailt:{" "}
+        <a href={`mailto:${email}`} className="mt-1 block break-words font-semibold text-lime hover:underline">
+          {email}
+        </a>
+      </Notice>
+    );
+  }
+
   if (state?.ok) {
     return (
-      <div
-        role="status"
-        className="flex flex-col items-center justify-center rounded-3xl border border-white/10 bg-petrol-deep p-8 text-center shadow-2xl md:p-10"
-      >
-        <span className="flex size-12 items-center justify-center rounded-full bg-lime text-petrol-deep">
-          <svg
-            viewBox="0 0 24 24"
-            className="size-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m5 12 5 5 9-10" />
-          </svg>
-        </span>
-        <h3 className="mt-6 text-xl font-semibold">Köszönöm, megkaptam!</h3>
-        <p className="mt-3 text-white/70">
-          1 munkanapon belül válaszolok a megadott e-mail címre.
-        </p>
-      </div>
+      <Notice role="status" title="Köszönöm, megkaptam!" icon={<path d="m5 12 5 5 9-10" />}>
+        1 munkanapon belül válaszolok a megadott e-mail címre.
+      </Notice>
     );
   }
 
@@ -152,7 +174,15 @@ export default function ContactForm() {
         />
         <span>
           Hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása
-          céljából kezeld.
+          céljából kezeld. Részletek az{" "}
+          <a
+            href="/adatkezeles"
+            target="_blank"
+            className="text-lime underline underline-offset-4 hover:text-white"
+          >
+            adatkezelési tájékoztatóban
+          </a>
+          .
         </span>
       </label>
       <Error id="cf-consent-err" msg={e.consent} />
