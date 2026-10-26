@@ -1,6 +1,7 @@
 import SectionHeading from "@/components/SectionHeading";
 import RichText from "@/components/cms/RichText";
 import { getCms } from "@/lib/cms";
+import { servicePageByIcon, servicePageByKey } from "@/content/pages";
 import Details from "./Details";
 
 // Ikonok: 24×24, 2px round stroke, egységes stílus.
@@ -132,13 +133,23 @@ export default async function Services() {
               className="mt-6 text-lg text-white/80 [&_strong]:font-semibold [&_strong]:text-lime"
               {...cms.attr("home.services.ibf_text")}
             />
-            <a
-              href="#kapcsolat"
-              className="mt-8 inline-block w-full rounded-full bg-lime px-10 py-4 text-center font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
-              {...cms.attr("home.services.ibf_cta")}
-            >
-              {cms.text("home.services.ibf_cta")}
-            </a>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+              <a
+                href="#kapcsolat"
+                className="inline-block w-full rounded-full bg-lime px-10 py-4 text-center font-semibold text-petrol-deep transition hover:brightness-110 sm:w-auto"
+                {...cms.attr("home.services.ibf_cta")}
+              >
+                {cms.text("home.services.ibf_cta")}
+              </a>
+              {/* belső link az IBF-aloldalra (SEO + aki többet olvasna) */}
+              <a
+                href={servicePageByKey("ibf").content.path}
+                className="py-2 text-center font-semibold text-lime underline-offset-4 hover:underline sm:text-left"
+                {...cms.attr("home.services.ibf_more")}
+              >
+                {cms.text("home.services.ibf_more")}
+              </a>
+            </div>
           </div>
 
           <ul className="space-y-4 self-center">
@@ -170,6 +181,7 @@ export default async function Services() {
         <ul className="mt-6 grid items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {items.map(({ icon, title, text }, i) => {
             const Icon = ICONS[icon] ?? ShieldIcon;
+            const page = servicePageByIcon(icon); // van-e aloldala (az ikon a kártyával mozog átrendezéskor)
             return (
               <li
                 key={i}
@@ -186,6 +198,14 @@ export default async function Services() {
                   </h3>
                 </div>
                 <Details textAttrs={cms.attr("home.services.items", i, "text")}>{text}</Details>
+                {page && (
+                  <a
+                    href={page.content.path}
+                    className="mb-3 inline-block py-1 font-semibold text-petrol underline decoration-lime decoration-2 underline-offset-4 hover:text-petrol-deep sm:mb-0"
+                  >
+                    {page.label} részletesen →
+                  </a>
+                )}
               </li>
             );
           })}

@@ -5,6 +5,68 @@
 // Sync: (admin repo) npx tsx scripts/sync-manifest.mjs <this file> --print-secret
 
 import { ABOUT, CONTACT, CONTACT_INFO, FOOTER, HERO, REFERENCES, SEO, SERVICES } from "./content/site";
+import { SERVICE_PAGES } from "./content/pages";
+
+// Szolgáltatás-aloldal (components/service-page): ugyanaz a mezőkészlet minden aloldalon.
+// Kulcsok: <key>.seo.*, <key>.hero.*, <key>.content.sections (cím + rich text), <key>.faq.* (kérdés–válasz).
+const servicePage = (key, label, page) => ({
+  key,
+  label,
+  path: page.path,
+  sections: [
+    {
+      key: "seo",
+      label: "Google-megjelenés",
+      fields: [
+        { key: "title", label: "Oldal címe (Google, böngészőfül)", type: "text", maxLength: 70, hidden: true, default: page.seo.title },
+        { key: "description", label: "Leírás (Google találati lista)", type: "textarea", maxLength: 160, hidden: true, default: page.seo.description },
+      ],
+    },
+    {
+      key: "hero",
+      label: "Nyitó rész",
+      fields: [
+        { key: "eyebrow", label: "Felirat a cím felett", type: "text", maxLength: 30, default: page.hero.eyebrow },
+        { key: "title", label: "Főcím", type: "text", maxLength: 80, default: page.hero.title },
+        { key: "lead", label: "Bevezető", type: "richtext", default: page.hero.lead },
+        { key: "cta", label: "Gomb felirata", type: "text", maxLength: 30, default: page.hero.cta },
+      ],
+    },
+    {
+      key: "content",
+      label: "Tartalom",
+      fields: [
+        {
+          key: "sections",
+          label: "Szakaszok",
+          type: "list",
+          itemFields: [
+            { key: "title", label: "Alcím", type: "text", maxLength: 90 },
+            { key: "body", label: "Szöveg", type: "richtext" },
+          ],
+          default: page.sections,
+        },
+      ],
+    },
+    {
+      key: "faq",
+      label: "Gyakori kérdések",
+      fields: [
+        { key: "title", label: "Cím", type: "text", maxLength: 60, default: page.faqTitle },
+        {
+          key: "items",
+          label: "Kérdések",
+          type: "list",
+          itemFields: [
+            { key: "question", label: "Kérdés", type: "text", maxLength: 140 },
+            { key: "answer", label: "Válasz", type: "textarea", maxLength: 900 },
+          ],
+          default: page.faq,
+        },
+      ],
+    },
+  ],
+});
 
 const manifest = {
   site: {
@@ -77,6 +139,7 @@ const manifest = {
             { key: "ibf_title", label: "Kiemelt szolgáltatás — cím", type: "text", maxLength: 60, default: SERVICES.ibfTitle },
             { key: "ibf_text", label: "Kiemelt szolgáltatás — leírás", type: "richtext", default: SERVICES.ibfText },
             { key: "ibf_cta", label: "Kiemelt szolgáltatás — gomb", type: "text", maxLength: 30, default: SERVICES.ibfCta },
+            { key: "ibf_more", label: "Kiemelt szolgáltatás — link az aloldalra", type: "text", maxLength: 50, default: SERVICES.ibfMore },
             {
               key: "ibf_tasks",
               label: "Kiemelt szolgáltatás — feladatok",
@@ -141,6 +204,7 @@ const manifest = {
         },
       ],
     },
+    ...SERVICE_PAGES.map((p) => servicePage(p.key, p.label, p.content)),
   ],
 };
 

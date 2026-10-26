@@ -59,7 +59,8 @@ export const SERVICES = {
     { b: "Havidíjas alapon" },
     ", megbízhatóan, szakszerűen.",
   ]),
-  ibfCta: "Kérjen ajánlatot",
+  ibfCta: "Kérj ajánlatot",
+  ibfMore: "Mit csinál pontosan egy IBF? →",
   // TODO: a feladatlistát Balázs pontosítsa (most általános IBF-feladatok).
   ibfTasks: [
     "Információbiztonsági szabályzatok elkészítése és karbantartása",

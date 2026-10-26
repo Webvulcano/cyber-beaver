@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import { getLegalDoc, parseInline } from "@/lib/legal";
+import SiteHeader from "@/components/SiteHeader";
 
-// Jogi oldal (impresszum, adatkezelés): sötét fejléc logóval → főoldal, világos olvasófelület,
+// Jogi oldal (impresszum, adatkezelés): közös SiteHeader (logó → főoldal), világos olvasófelület,
 // alul ugyanaz a copyright + jogi linkek sáv, mint a főoldal footerén. Szöveg: content/legal/<name>.md.
 
 const YEAR = new Date().getFullYear();
@@ -95,20 +96,7 @@ export default async function LegalPage({ name }) {
 
   return (
     <>
-      <header className="bg-petrol text-white">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-4">
-          <Link href="/" className="flex items-center gap-3" aria-label="Cyber Beaver – főoldal">
-            <img src="/logo-mark-white.png" alt="" width={579} height={516} className="h-9 w-auto" />
-            <span className="text-lg tracking-wide">
-              <span className="font-extrabold">CYBER</span>
-              <span className="font-light">BEAVER</span>
-            </span>
-          </Link>
-          <Link href="/" className="py-2 text-sm font-semibold text-lime hover:text-white">
-            ← Főoldal
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1 bg-mist px-4 py-16 md:py-24">
         <article className="mx-auto max-w-3xl text-petrol/80">
