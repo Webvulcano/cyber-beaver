@@ -2,8 +2,9 @@
 
 // Kapcsolat-űrlap (server action: app/actions/contact.js → SimplyForms). Sikeres küldés után köszönő üzenet.
 // enabled=false (nincs SIMPLYFORMS_FORM_ID): "karbantartás alatt" kártya az űrlap helyett.
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { sendContact } from "@/app/actions/contact";
+import { trackEvent } from "@/lib/analytics";
 
 const field =
   "mt-2 w-full rounded-xl border border-white/15 bg-white/[0.07] px-4 py-3 text-white placeholder:text-white/35 transition outline-none focus:border-lime focus:bg-white/[0.1]";
@@ -57,6 +58,11 @@ export default function ContactForm({ enabled, email }) {
   const [state, action, pending] = useActionState(sendContact, null);
   const e = state?.errors ?? {};
   const v = state?.values ?? {};
+
+  // Konverzió: sikeres küldés (az űrlap tartalma nélkül)
+  useEffect(() => {
+    if (state?.ok) trackEvent("Űrlapküldés", { oldal: window.location.pathname });
+  }, [state]);
 
   if (!enabled) {
     return (

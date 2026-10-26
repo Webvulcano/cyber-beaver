@@ -46,7 +46,7 @@ Ha e-mailben, telefonon vagy LinkedInen keresel minket, a megadott elérhetősé
 
 | | |
 |---|---|
-| **Adatok** | a megtekintett oldal, a hivatkozó oldal, a böngésző, az operációs rendszer és az eszköz típusa, az ország, a látogatás időpontja; sebességméréshez az oldal betöltési és válaszidő-adatai, a hálózati kapcsolat típusa |
+| **Adatok** | a megtekintett oldal, a hivatkozó oldal, a böngésző, az operációs rendszer és az eszköz típusa, az ország, a látogatás időpontja; a kapcsolatfelvételi gombokra (telefon, e-mail, LinkedIn, kapcsolat) való kattintás és a kapcsolatfelvételi űrlap sikeres elküldésének ténye (az űrlapba írt adatok nélkül); sebességméréshez az oldal betöltési és válaszidő-adatai, a hálózati kapcsolat típusa |
 | **Cél** | annak megértése, hogy mely oldalakat és tartalmakat nézik a látogatók, a weboldal sebességének mérése, és ezek alapján a weboldal fejlesztése |
 | **Jogalap** | jogos érdek (GDPR 6. cikk (1) f) |
 | **Időtartam** | a látogatások megkülönböztetésére az IP címből és a böngésző adataiból képzett kódot (hash) a rendszer 24 óra után automatikusan törli; ezt követően csak összesített, személyhez nem köthető statisztika marad |

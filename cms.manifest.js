@@ -104,7 +104,14 @@ const manifest = {
   },
   locales: [{ code: "hu", label: "Magyar" }],
   members: [],
-  analytics: {},
+  analytics: {
+    vercel: {
+      projectId: "prj_yNW7jP4s8qzp0KyDWYbrN7ms6toN",
+      teamId: "team_3e4PonEWGDktxZ3jN5cVjuN8",
+      // Valódi konverziók (lib/analytics.js eseménynevei); a többi esemény = érdeklődés.
+      conversions: ["Telefonhívás", "Email", "Űrlapküldés"],
+    },
+  },
   pages: [
     {
       key: "home",
