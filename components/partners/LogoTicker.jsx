@@ -20,7 +20,7 @@ export default function LogoTicker() {
         <ul className="flex w-max items-center animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none">
           {[...PARTNERS, ...PARTNERS].map(({ name, src, h }, i) => (
             <li key={i} aria-hidden={i >= PARTNERS.length} className="shrink-0 px-10 opacity-90 md:px-16">
-              <img src={src} alt={i < PARTNERS.length ? name : ""} className={`${h} w-auto brightness-0 invert`} />
+              <img src={src} alt={name} className={`${h} w-auto brightness-0 invert`} />
             </li>
           ))}
         </ul>

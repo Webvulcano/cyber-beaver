@@ -1,6 +1,8 @@
 import { revalidateTag } from "next/cache";
 import { createHash, timingSafeEqual } from "node:crypto";
 import { cmsPagePaths, cmsReachable, cmsTag } from "@/lib/cms";
+import { PUBLISHED_PAGES } from "@/content/pages";
+import { submitIndexNow } from "@/lib/indexnow";
 
 // Called by the admin after every save. Fixed tag (no input from the request body),
 // so a leaked secret can at most trigger a refresh of this one site.
@@ -31,6 +33,9 @@ export async function POST(request) {
       fetch(new URL(path, origin), { cache: "no-store", signal: AbortSignal.timeout(8000) })
     )
   );
+
+  // A keresők (Bing, Yandex…) azonnal értesülnek a frissült szövegről — csak az indexelhető oldalak (főoldal + publikált aloldalak).
+  if (fresh) await submitIndexNow(["/", ...PUBLISHED_PAGES.map((p) => p.content.path)]);
 
   return Response.json({ ok: true, mode: fresh ? "expire" : "stale", warmed: warmed.filter((r) => r.status === "fulfilled").length });
 }

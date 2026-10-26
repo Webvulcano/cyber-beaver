@@ -137,7 +137,7 @@ export default async function Footer() {
 
       <div className="-mt-px bg-petrol-deep pb-10 text-center">
         {/* logo-mark-white.png: a public/logo.jpg hódfeje fehérre, átlátszó háttérrel (felirat nélkül) */}
-        <img src="/logo-mark-white.png" alt="" width={579} height={516} className="mx-auto mb-4 h-16 w-auto" />
+        <img src="/logo-mark-white.png" alt="Cyber Beaver logó" width={579} height={516} className="mx-auto mb-4 h-16 w-auto" />
         <p className="text-2xl tracking-wide">
           <span className="font-extrabold">CYBER</span>
           <span className="font-light">BEAVER</span>

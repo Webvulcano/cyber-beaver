@@ -9,7 +9,7 @@ export default function SiteHeader({ contactHref = "/#kapcsolat", servicesHref =
     <header className="sticky top-0 z-40 border-b border-white/10 bg-petrol text-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" className="flex items-center gap-3" aria-label="Cyber Beaver – főoldal">
-          <img src="/logo-mark-white.png" alt="" width={579} height={516} className="h-9 w-auto" />
+          <img src="/logo-mark-white.png" alt="Cyber Beaver logó" width={579} height={516} className="h-9 w-auto" />
           <span className="text-lg tracking-wide">
             <span className="font-extrabold">CYBER</span>
             <span className="font-light">BEAVER</span>
