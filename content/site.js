@@ -48,7 +48,7 @@ export const ABOUT = {
       { b: "Big4-os precizitást és munkakultúrát ötvözöm a kisvállalkozások gyorsaságával és közvetlenségével." },
     ],
   ),
-  certsTitle: "Tanusítványok",
+  certsTitle: "Tanúsítványok",
 };
 
 export const SERVICES = {

@@ -6,7 +6,7 @@ import RichText from "@/components/cms/RichText";
 const FACTS = [
   //{ value: "CISA", label: "Minősített informatikai rendszerellenőr", logo: "/minositesek/cisa.webp" },
   //{ value: "CISM", label: "Minősített információbiztonsági menedzser", logo: "/minositesek/cism.webp" },
-  { value: "CIPM", label: "Certified Information Privacy Manager", logo: "/minositesek/tanusitvany1.png", href: "https://iapp.org/certify/cipm" },
+  { value: "CIPM", label: "Certified Information Privacy Manager", logo: "/minositesek/cipm.webp", href: "https://iapp.org/certify/cipm" },
 ];
 
 // Kivágott portré lime keretes körbe vágva (a kerek logó visszhangja). Méret/láthatóság: className.
