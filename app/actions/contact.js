@@ -57,6 +57,8 @@ async function sendToSimplyForms({ name, company, email, phone, message }) {
   body.append("E-mail", email);
   body.append("Telefon", phone);
   body.append("Üzenet", message);
+  // "_" előtag: nem jelenik meg a levélben, csak Reply-To lesz → Balázs válasza a kitöltőhöz megy
+  body.append("_replyto", email);
 
   try {
     const res = await fetch(`https://api.simplyforms.app/v1/forms/${formId}`, { method: "POST", body });
