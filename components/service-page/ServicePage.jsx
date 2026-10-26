@@ -7,14 +7,15 @@ import { SITE_URL } from "@/content/site";
 import { SERVICE_PAGES, servicePageByKey } from "@/content/pages";
 import { getCms } from "@/lib/cms";
 import { breadcrumbNode, faqNode, orgNode, serviceNode } from "@/lib/schema";
+import { Block, DARK_BLOCKS } from "./blocks";
+import SectionNav from "./SectionNav";
 
-// Szolgáltatás-aloldal sablon (IBF, TISAX, …): fejléc → hero (morzsamenü, H1, lead, CTA) → tartalmi szakaszok →
-// GYIK (a válasz mindig a DOM-ban: <details>) → kapcsolódó oldalak → a főoldali kapcsolat-rész (Footer, #kapcsolat).
-// Szöveg: CMS <key>.* (manifest: servicePage), alapérték: content/pages/<key>.js. JSON-LD: Service + FAQPage + Breadcrumb.
+// Szolgáltatás-aloldal sablon (IBF, TISAX, …): fejléc → hero (morzsamenü, H1, lead, CTA) → típusos blokkok (blocks.jsx)
+// + oldalsó szakasz-navigáció az ablak bal szélén (SectionNav, xl-től) → GYIK (<details>, a válasz mindig a DOM-ban) → kapcsolódó oldalak → Footer (#kapcsolat).
+// Szöveg: CMS <oldal>.* (manifest: servicePage), alapérték + blokk-sorrend: content/pages/<oldal>.js.
+// JSON-LD: Service + FAQPage + Breadcrumb + cég.
 
-// Rich text tipográfia világos háttéren (listák, kiemelés, linkek)
-const prose =
-  "text-lg text-petrol/80 [&>*+*]:mt-5 [&_ul]:list-disc [&_ul]:space-y-3 [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:space-y-3 [&_ol]:pl-6 [&_li]:pl-1 [&_strong]:font-semibold [&_strong]:text-petrol-deep [&_a]:font-medium [&_a]:text-petrol-deep [&_a]:underline [&_a]:decoration-lime [&_a]:decoration-2 [&_a]:underline-offset-4";
+const ALL_SERVICES = "/#szolgaltatasok";
 
 export async function serviceMetadata(key) {
   const cms = await getCms();
@@ -49,12 +50,19 @@ function Chevron() {
 export default async function ServicePage({ pageKey }) {
   const cms = await getCms();
   const page = servicePageByKey(pageKey);
-  const { path } = page.content;
+  const { path, blocks } = page.content;
   const k = (s) => `${pageKey}.${s}`;
   const title = cms.text(k("hero.title"));
-  const sections = cms.list(k("content.sections"));
   const faq = cms.list(k("faq.items")).filter((f) => f.question?.trim() && f.answer?.trim());
   const related = SERVICE_PAGES.filter((p) => p.key !== pageKey);
+
+  // Világos blokkok felváltva fehér / szürke háttérrel (a sötét és accent blokkok kimaradnak a váltásból)
+  let light = 0;
+  const bgs = blocks.map((b) => (DARK_BLOCKS.has(b.type) ? null : light++ % 2 ? "mist" : "white"));
+  const faqBg = light % 2 ? "bg-mist" : "bg-white";
+  const nav = [...blocks.filter((b) => b.nav).map((b) => ({ id: b.key, label: b.nav })), ...(faq.length ? [{ id: "gyik", label: "Gyakori kérdések" }] : [])];
+  // minden szakasz a navigáció színéhez: sötét sávok (számsáv, bizalmi sáv) fölött világos a navigáció
+  const navSections = [...blocks.map((b) => ({ id: b.key, dark: b.type === "stats" || b.type === "trust" })), ...(faq.length ? [{ id: "gyik", dark: false }] : [])];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -73,11 +81,12 @@ export default async function ServicePage({ pageKey }) {
     <>
       <JsonLd data={jsonLd} />
       <SiteHeader contactHref="#kapcsolat" />
+      {nav.length > 0 && <SectionNav items={nav} sections={navSections} />}
 
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-petrol text-white">
-          <div className="mx-auto max-w-4xl px-4 pt-10 pb-16 md:pt-14 md:pb-24">
+          <div className="mx-auto max-w-6xl px-4 pt-10 pb-20 md:pt-14 md:pb-28">
             <nav aria-label="Morzsamenü" className="text-sm text-white/60">
               <ol className="flex flex-wrap items-center gap-2">
                 <li>
@@ -91,15 +100,16 @@ export default async function ServicePage({ pageKey }) {
                 </li>
               </ol>
             </nav>
+
             <p className="mt-10 text-sm font-semibold uppercase tracking-[0.2em] text-lime" {...cms.attr(k("hero.eyebrow"))}>
               {cms.text(k("hero.eyebrow"))}
             </p>
-            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl" {...cms.attr(k("hero.title"))}>
+            <h1 className="mt-4 max-w-4xl text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl" {...cms.attr(k("hero.title"))}>
               {title}
             </h1>
             <RichText
               value={cms.rich(k("hero.lead"))}
-              className="mt-8 max-w-3xl text-lg text-white/80 [&>*+*]:mt-4 [&_em]:text-white [&_strong]:font-semibold [&_strong]:text-lime"
+              className="mt-8 max-w-2xl text-lg text-white/80 [&>*+*]:mt-4 [&_em]:text-white [&_strong]:font-semibold [&_strong]:text-lime"
               {...cms.attr(k("hero.lead"))}
             />
             <a
@@ -112,26 +122,15 @@ export default async function ServicePage({ pageKey }) {
           </div>
         </section>
 
-        {/* Tartalmi szakaszok */}
-        {sections.map(({ title: h2, body }, i) => (
-          <section key={i} className={i % 2 ? "bg-mist" : "bg-white"}>
-            <div className="mx-auto max-w-3xl px-4 py-16 md:py-20">
-              <h2
-                className="text-2xl font-bold tracking-tight text-petrol-deep md:text-3xl"
-                {...cms.attr(k("content.sections"), i, "title")}
-              >
-                {h2}
-              </h2>
-              <RichText value={body} className={`mt-6 ${prose}`} {...cms.attr(k("content.sections"), i, "body")} />
-            </div>
-          </section>
+        {blocks.map((block, i) => (
+          <Block key={block.key} cms={cms} pageKey={pageKey} block={block} bg={bgs[i]} />
         ))}
 
         {/* GYIK */}
         {faq.length > 0 && (
-          <section className={sections.length % 2 ? "bg-mist" : "bg-white"} aria-labelledby="gyik">
-            <div className="mx-auto max-w-3xl px-4 py-16 md:py-20">
-              <h2 id="gyik" className="text-2xl font-bold tracking-tight text-petrol-deep md:text-3xl" {...cms.attr(k("faq.title"))}>
+          <section id="gyik" className={`scroll-mt-16 ${faqBg}`} aria-labelledby="gyik-cim">
+            <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
+              <h2 id="gyik-cim" className="text-2xl font-bold tracking-tight text-petrol-deep md:text-3xl" {...cms.attr(k("faq.title"))}>
                 {cms.text(k("faq.title"))}
               </h2>
               <div className="mt-8 border-t border-petrol/15">
@@ -153,16 +152,17 @@ export default async function ServicePage({ pageKey }) {
 
         {/* Kapcsolódó oldalak (belső linkek) */}
         <nav aria-label="További szolgáltatások" className="bg-petrol-deep text-white">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-x-8 gap-y-3 px-4 py-8 text-sm font-semibold">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-3 px-4 py-8 text-sm font-semibold">
             <span className="uppercase tracking-[0.2em] text-white/50">További szolgáltatások</span>
             {related.map((p) => (
               <Link key={p.key} href={p.content.path} className="py-1 text-lime hover:text-white">
                 {p.label} →
               </Link>
             ))}
-            <Link href="/#szolgaltatasok" className="py-1 text-lime hover:text-white">
+            {/* sima <a>: a Next Link oldalak között nem görget a hash-hez (lásd SiteHeader) */}
+            <a href={ALL_SERVICES} className="py-1 text-lime hover:text-white">
               Összes szolgáltatás →
-            </Link>
+            </a>
           </div>
         </nav>
       </main>

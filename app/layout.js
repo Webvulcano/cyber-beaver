@@ -1,6 +1,7 @@
 import { Figtree } from "next/font/google";
 import SiteAnalytics from "@/components/analytics/SiteAnalytics";
 import CmsBridge from "@/components/cms/CmsBridge";
+import HashScroll from "@/components/HashScroll";
 import { getCms } from "@/lib/cms";
 import { SITE_URL } from "@/content/site";
 import "./globals.css";
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         {children}
         <CmsBridge />
+        <HashScroll />
         <SiteAnalytics />
       </body>
     </html>

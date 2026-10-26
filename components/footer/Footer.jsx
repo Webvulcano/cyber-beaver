@@ -102,7 +102,7 @@ export default async function Footer() {
   return (
     <footer
       id="kapcsolat"
-      className="overflow-hidden bg-petrol text-white"
+      className="scroll-mt-16 overflow-hidden bg-petrol text-white"
       style={{ backgroundImage: DOT_GRID, backgroundPosition: "center top" }}
     >
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-20 pb-16 md:pt-32 md:pb-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">

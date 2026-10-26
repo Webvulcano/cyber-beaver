@@ -16,73 +16,128 @@ export const TISAX = {
     eyebrow: "Szolgáltatás",
     title: "TISAX felkészítés és tanácsadás",
     lead: mdToDoc(`
-A TISAX (*Trusted Information Security Assessment Exchange*) az autóipar egységes információbiztonsági értékelése. Ha a megrendelőd TISAX-címkét kér, egy ENX által jóváhagyott audit szolgáltató értékeli a céged, az eredményt pedig az ENX portálon osztod meg – **egyszer értékelnek, sok partner elfogadja**.
-
-Több ügyfelemet segítettem már sikeres TISAX-címke elérésében: a hatókör meghatározásától a hiányosságok javításáig végigkísérlek a folyamaton.
+A TISAX az autóipar egységes információbiztonsági értékelése. Ha a megrendelőd TISAX-címkét kér, felkészítem a céged az értékelésre, amelyet egy független, ENX által jóváhagyott audit szolgáltató végez. Több ügyfelemet segítettem már sikeres TISAX-címke elérésében.
 `),
     cta: "Kérj ajánlatot",
   },
-  sections: [
+  blocks: [
     {
+      key: "who",
+      type: "cards",
+      nav: "Kinek kell?",
+      label: "Kinek kell",
       title: "Kinek kell TISAX?",
-      body: mdToDoc(`
-A TISAX-ot jellemzően a megrendelő kéri: egy gépjárműgyártó vagy egy nagyobb beszállító attól a partnerétől, akivel bizalmas információt, prototípust vagy személyes adatot oszt meg. Tipikusan érintett:
-
-- **autóipari beszállítók** – alkatrész- és rendszergyártók;
-- **mérnöki és fejlesztő cégek**, amelyek a megrendelő terveivel, adataival dolgoznak;
-- **IT- és szoftverszolgáltatók** autóipari ügyfeleknek;
-- **prototípusokkal dolgozó cégek** – gyártás, tesztelés, szállítás, rendezvények.
-
-Ha a megrendelőd TISAX-címkét kér, azt is megmondja, melyik címkére van szüksége – ettől függ az értékelés szintje és a felkészülés mélysége.
-`),
+      intro:
+        "A TISAX-ot jellemzően a megrendelő kéri: egy gépjárműgyártó vagy nagyobb beszállító attól a partnerétől, akivel bizalmas információt, prototípust vagy személyes adatot oszt meg.",
+      items: [
+        { icon: "factory", title: "Autóipari beszállítók", text: "Alkatrész- és rendszergyártók, akik a megrendelő bizalmas adataival dolgoznak." },
+        { icon: "chart", title: "Mérnöki és fejlesztő cégek", text: "Tervezés, fejlesztés, szimuláció a megrendelő terveivel és adataival." },
+        { icon: "lock", title: "IT- és szoftverszolgáltatók", text: "Rendszerek, szoftverek, üzemeltetés autóipari ügyfeleknek." },
+        { icon: "car", title: "Prototípusokkal dolgozók", text: "Prototípus-gyártás, -tesztelés, -szállítás, rendezvények és fotózások." },
+      ],
+      note: "A megrendelő azt is megmondja, melyik címkére van szükség. Ha nem egyértelmű, segítek értelmezni az elvárást.",
+      noteCta: "Kérdezz bátran",
     },
     {
-      title: "Értékelési szintek és címkék",
-      body: mdToDoc(`
-A TISAX a VDA ISA (Information Security Assessment) követelménykatalógusára épül – ma az **ISA 6** érvényes, a 2027. január 1-jétől megrendelt értékelésekre pedig az **ISA2027** vonatkozik. Címkét két szinten lehet szerezni:
-
-- **AL2 (2-es értékelési szint):** az audit szolgáltató ellenőrzi az önértékelést és a bizonyítékokat, az információbiztonsági felelőssel jellemzően videóhívásban egyeztet.
-- **AL3 (3-as értékelési szint):** alapos, helyszíni ellenőrzés – dokumentumok, bizonyítékok, interjúk a folyamatgazdákkal és a helyszíni körülmények vizsgálata.
-
-A választható címkék (az ENX hivatalos angol elnevezésével):
-
-- **Confidential / Strictly confidential** – bizalmas, illetve szigorúan bizalmas információ védelme (AL2 / AL3);
-- **High availability / Very high availability** – magas, illetve nagyon magas rendelkezésre állás (AL2 / AL3);
-- **Proto parts / Proto vehicles** – prototípus-alkatrészek, illetve prototípus-járművek védelme (AL3);
-- **Test vehicles / Proto events** – tesztjárművek, illetve prototípus-rendezvények és -fotózások (AL2);
-- **Data / Special data** – személyes adatok, illetve különleges adatok kezelése a megrendelő megbízásából (AL2 / AL3).
-`),
+      key: "levels",
+      type: "duo",
+      nav: "Szintek",
+      label: "Értékelési szintek",
+      title: "Értékelési szintek",
+      intro:
+        "A TISAX a VDA ISA követelménykatalógusára épül – ma az ISA 6 érvényes, a 2027. január 1-jétől megrendelt értékelésekre az ISA2027 vonatkozik. Címkét két szinten lehet szerezni:",
+      items: [
+        {
+          title: "AL2 – 2-es szint",
+          points:
+            "Az audit szolgáltató ellenőrzi az önértékelést és a bizonyítékokat\nInterjú jellemzően videóhívásban\nHelyszíni ellenőrzés csak kérésre",
+        },
+        {
+          title: "AL3 – 3-as szint",
+          points: "Alapos, helyszíni ellenőrzés\nDokumentumok, bizonyítékok, interjúk a folyamatgazdákkal\nA helyszíni körülmények vizsgálata",
+        },
+      ],
     },
     {
+      key: "labels",
+      type: "chips",
+      nav: "Címkék",
+      label: "Címkék",
+      title: "A választható címkék",
+      intro: "A címke azt mutatja, milyen információ vagy prototípus védelmére készült fel a céged (az ENX hivatalos angol elnevezésével):",
+      items: [
+        { name: "Confidential", desc: "Bizalmas információ védelme", level: "AL2" },
+        { name: "Strictly confidential", desc: "Szigorúan bizalmas információ védelme", level: "AL3" },
+        { name: "High availability", desc: "Magas rendelkezésre állás", level: "AL2" },
+        { name: "Very high availability", desc: "Nagyon magas rendelkezésre állás", level: "AL3" },
+        { name: "Proto parts", desc: "Prototípus-alkatrészek védelme", level: "AL3" },
+        { name: "Proto vehicles", desc: "Prototípus-járművek védelme", level: "AL3" },
+        { name: "Test vehicles", desc: "Tesztjárművek kezelése", level: "AL2" },
+        { name: "Proto events", desc: "Prototípus-rendezvények és -fotózások", level: "AL2" },
+        { name: "Data", desc: "Személyes adatok kezelése a megrendelő megbízásából", level: "AL2" },
+        { name: "Special data", desc: "Különleges adatok kezelése a megrendelő megbízásából", level: "AL3" },
+      ],
+    },
+    {
+      key: "numbers",
+      type: "stats",
+      label: "Fontos számok",
+      title: "Fontos számok",
+      items: [
+        { value: "3 év", label: "a címke érvényessége az értékelés végétől" },
+        { value: "9 hónap", label: "a feltárt hiányosságok lezárására" },
+        { value: "10", label: "választható címke" },
+        { value: "1 év", label: "ennyivel a lejárat előtt érdemes a megújítást elkezdeni" },
+      ],
+    },
+    {
+      key: "process",
+      type: "steps",
+      nav: "Folyamat",
+      label: "A folyamat lépései",
       title: "A TISAX-folyamat lépései",
-      body: mdToDoc(`
-1. **Regisztráció az ENX portálon** – a hatókör, a telephelyek és a szükséges címkék megadása. A regisztráció díjköteles, a díj a telephelyek számától függ.
-2. **Önértékelés** – az ISA Excel-katalógus kitöltése: hol tart ma a céged az egyes követelményekben.
-3. **Felkészülés** – a hiányzó szabályzatok, folyamatok és kontrollok kialakítása, a bizonyítékok összegyűjtése.
-4. **Audit szolgáltató kiválasztása** – csak ENX által jóváhagyott szolgáltató értékelhet, ajánlatot több helyről is kérhetsz.
-5. **Értékelés** – az eredmény lehet megfelelő, kisebb vagy jelentős eltérés. Kisebb eltérésnél ideiglenes címke is kérhető.
-6. **Javítás** – a feltárt hiányosságokat legfeljebb 9 hónapon belül le kell zárni, különben a folyamat elölről kezdődik.
-7. **Címke és megosztás** – az eredmény az ENX portálra kerül (nem nyilvános), és te döntöd el, kivel osztod meg. A címke általában **3 évig érvényes**; a megújítást érdemes egy évvel a lejárat előtt elkezdeni.
-`),
+      items: [
+        { title: "Regisztráció", text: "Az ENX portálon: hatókör, telephelyek, címkék. Díjköteles, a telephelyek számától függ." },
+        { title: "Önértékelés", text: "Az ISA Excel-katalógus kitöltése: hol tart ma a céged." },
+        { title: "Felkészülés", text: "A hiányzó szabályzatok, folyamatok és kontrollok kialakítása, a bizonyítékok összegyűjtése." },
+        { title: "Audit szolgáltató", text: "Csak ENX által jóváhagyott szolgáltató értékelhet – ajánlatot több helyről is kérhetsz." },
+        { title: "Értékelés és javítás", text: "Kisebb eltérésnél ideiglenes címke kérhető; a hiányosságokat legfeljebb 9 hónap alatt kell lezárni." },
+        { title: "Címke", text: "Az eredmény az ENX portálra kerül (nem nyilvános), és te döntöd el, kivel osztod meg." },
+      ],
     },
     {
+      key: "cta",
+      type: "cta",
+      label: "Köztes ajánlatkérés",
+      title: "Nézzük meg, mennyi munka van hátra",
+      text: "Egy rövid egyeztetésen felmérem, milyen címke kell és hol tart ma a céged, és fix ajánlatot adok a felkészítésre.",
+      cta: "Kérj ajánlatot",
+    },
+    {
+      key: "help",
+      type: "checklist",
+      nav: "Hogyan segítek?",
+      label: "Hogyan segítek",
       title: "Hogyan segítek?",
-      body: mdToDoc(`
-- **Hatókör és címkék** – a megrendelő elvárásai alapján meghatározzuk, milyen címkére és szintre van szükséged, és melyik telephelyekre.
-- **GAP-elemzés** – az ISA követelményei mentén felmérem, mi hiányzik még.
-- **Bevezetés** – szabályzatok, eljárások és kontrollok, gyakorlatias formában, hogy a mindennapokban is működjenek.
-- **Önértékelés és bizonyítékok** – segítek kitölteni az ISA-katalógust és összeállítani a bizonyítékokat.
-- **Audit-támogatás** – felkészítés az értékelésre, jelenlét az auditon, és a javítási terv a feltárt eltérésekre.
-
-Az a cég, amelyik korábban tanácsot adott neked, nem lehet az audit szolgáltatód – a felkészítő és az értékelő tehát mindig két külön szereplő. Én a te oldaladon állok.
-`),
+      items: [
+        { text: "Hatókör és címkék meghatározása a megrendelő elvárásai alapján" },
+        { text: "GAP-elemzés az ISA követelményei mentén" },
+        { text: "Szabályzatok, eljárások és kontrollok bevezetése – gyakorlatias formában" },
+        { text: "Az ISA-önértékelés kitöltése és a bizonyítékok összeállítása" },
+        { text: "Felkészítés az értékelésre és jelenlét az auditon" },
+        { text: "Javítási terv a feltárt eltérésekre" },
+      ],
+      note: "Az a cég, amelyik korábban tanácsot adott neked, nem lehet az audit szolgáltatód – a felkészítő és az értékelő mindig két külön szereplő. Én a te oldaladon állok.",
     },
     {
-      title: "TISAX és NIS2",
+      key: "nis2",
+      type: "prose",
+      label: "TISAX és NIS2",
+      title: "TISAX és NIS2 egyben",
       body: mdToDoc(`
-Sok autóipari beszállítónak nem csak a TISAX a feladata: a gyártási ágazat – köztük a gépjárműgyártás – a kiberbiztonsági törvény hatálya alá is tartozik, így egy közép- vagy nagyvállalat beszállító gyakran NIS2-köteles is. A két követelményrendszer sok ponton átfed, ezért érdemes egyben kezelni őket: egy szabályzatrendszer, egy kockázatelemzés, kétféle megfelelés.
+A gyártási ágazat – köztük a gépjárműgyártás – a kiberbiztonsági törvény hatálya alá is tartozik, így egy közép- vagy nagyvállalat beszállító gyakran **NIS2-köteles is**. A két követelményrendszer sok ponton átfed: egy szabályzatrendszer, egy kockázatelemzés, kétféle megfelelés.
 
-Ha emellett információbiztonsági felelősre is szükséged van, azt is vállalom – erről az [információbiztonsági felelős](/informaciobiztonsagi-felelos) oldalon olvashatsz.
+Ha információbiztonsági felelősre is szükséged van, azt is vállalom – erről az [információbiztonsági felelős](/informaciobiztonsagi-felelos) oldalon olvashatsz.
 `),
     },
   ],

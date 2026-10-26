@@ -12,12 +12,13 @@ function Bracket({ side }) {
   );
 }
 
+// Magasság: a sticky fejléc (SiteHeader, 69px) alatt pontosan egy képernyőnyi.
 export default async function Hero() {
   const cms = await getCms();
   const services = cms.list("home.hero.services");
 
   return (
-    <section className="relative isolate flex min-h-svh items-center overflow-hidden bg-petrol text-white">
+    <section className="relative isolate flex min-h-[calc(100svh-69px)] items-center overflow-hidden bg-petrol text-white">
       <RiskGrid />
       {/* sötétebb folt a szöveg mögött, hogy a rács ne zavarja az olvasást */}
       <div

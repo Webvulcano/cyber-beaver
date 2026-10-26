@@ -50,7 +50,7 @@ export default async function References() {
   const edge = "px-4 xl:px-[calc((100vw-72rem)/2+1rem)]";
 
   return (
-    <section id="referenciak" className="bg-mist pb-20 text-petrol-deep md:pb-32">
+    <section id="referenciak" className="scroll-mt-24 bg-mist pb-20 text-petrol-deep md:pb-32">
       {/* nincs felső padding: a Szolgáltatások (szintén bg-mist) alsó paddingje adja a rést */}
       <Carousel
         edgeClass={edge}

@@ -7,8 +7,58 @@
 import { ABOUT, CONTACT, CONTACT_INFO, FOOTER, HERO, REFERENCES, SEO, SERVICES } from "./content/site";
 import { SERVICE_PAGES } from "./content/pages";
 
-// Szolgáltatás-aloldal (components/service-page): ugyanaz a mezőkészlet minden aloldalon.
-// Kulcsok: <key>.seo.*, <key>.hero.*, <key>.content.sections (cím + rich text), <key>.faq.* (kérdés–válasz).
+// Szolgáltatás-aloldal (components/service-page): hero + típusos blokkok (content/pages/<oldal>.js → blocks) + GYIK.
+// Kulcsok: <oldal>.seo.*, <oldal>.hero.*, <oldal>.<blokk-kulcs>.*, <oldal>.faq.*. A blokk típusa határozza meg a mezőket.
+const text = (key, label, def, maxLength = 90) => ({ key, label, type: "text", maxLength, default: def });
+const area = (key, label, def, maxLength = 600) => ({ key, label, type: "textarea", maxLength, default: def });
+const list = (key, label, itemFields, def) => ({ key, label, type: "list", itemFields, default: def });
+const it = (key, label, type = "text", extra = {}) => ({ key, label, type, ...extra });
+
+function blockFields(b) {
+  const head = [text("title", "Cím", b.title), ...(b.intro !== undefined ? [area("intro", "Bevezető", b.intro, 400)] : [])];
+  const note = b.note !== undefined ? [area("note", "Kiemelt megjegyzés", b.note, 400)] : [];
+  switch (b.type) {
+    case "cards":
+      return [
+        ...head,
+        list("items", "Kártyák", [it("icon", "Ikon", "text", { maxLength: 20, hidden: true }), it("title", "Cím"), it("text", "Szöveg", "textarea", { maxLength: 300 })], b.items),
+        ...note,
+        ...(b.noteCta !== undefined ? [text("note_cta", "Megjegyzés gombja", b.noteCta, 40)] : []),
+      ];
+    case "checklist":
+      return [...head, list("items", "Pontok", [it("text", "Pont", "textarea", { maxLength: 300 })], b.items), ...note];
+    case "stats":
+      return [...head, list("items", "Számok", [it("value", "Szám / érték", "text", { maxLength: 20 }), it("label", "Magyarázat", "text", { maxLength: 120 })], b.items)];
+    case "duo":
+      return [...head, list("items", "Kártyák", [it("title", "Cím"), it("points", "Pontok (soronként egy)", "textarea", { maxLength: 500 })], b.items), ...note];
+    case "compare":
+      return [
+        ...head,
+        text("col_a", "Bal oszlop fejléce", b.colA, 40),
+        text("col_b", "Jobb oszlop fejléce", b.colB, 40),
+        list("rows", "Sorok", [it("label", "Szempont"), it("a", "Bal oszlop", "textarea", { maxLength: 200 }), it("b", "Jobb oszlop", "textarea", { maxLength: 200 })], b.rows),
+        ...note,
+      ];
+    case "steps":
+      return [...head, list("items", "Lépések", [it("title", "Lépés"), it("text", "Leírás", "textarea", { maxLength: 300 })], b.items)];
+    case "chips":
+      return [...head, list("items", "Címkék", [it("name", "Név", "text", { maxLength: 40 }), it("desc", "Leírás", "text", { maxLength: 120 }), it("level", "Szint", "text", { maxLength: 10 })], b.items)];
+    case "trust":
+      return [
+        ...head,
+        list("stats", "Számok", [it("value", "Szám / érték", "text", { maxLength: 20 }), it("label", "Magyarázat", "text", { maxLength: 120 })], b.stats),
+        list("points", "Tapasztalatok", [it("text", "Pont", "textarea", { maxLength: 200 })], b.points),
+        area("quote", "Kiemelt mondat", b.quote, 240),
+      ];
+    case "cta":
+      return [text("title", "Cím", b.title), area("text", "Szöveg", b.text, 300), text("cta", "Gomb felirata", b.cta, 30)];
+    case "prose":
+      return [text("title", "Cím", b.title), { key: "body", label: "Szöveg", type: "richtext", default: b.body }];
+    default:
+      throw new Error(`Ismeretlen blokk-típus: ${b.type} (${b.key})`);
+  }
+}
+
 const servicePage = (key, label, page) => ({
   key,
   label,
@@ -26,43 +76,19 @@ const servicePage = (key, label, page) => ({
       key: "hero",
       label: "Nyitó rész",
       fields: [
-        { key: "eyebrow", label: "Felirat a cím felett", type: "text", maxLength: 30, default: page.hero.eyebrow },
-        { key: "title", label: "Főcím", type: "text", maxLength: 80, default: page.hero.title },
+        text("eyebrow", "Felirat a cím felett", page.hero.eyebrow, 30),
+        text("title", "Főcím", page.hero.title, 80),
         { key: "lead", label: "Bevezető", type: "richtext", default: page.hero.lead },
-        { key: "cta", label: "Gomb felirata", type: "text", maxLength: 30, default: page.hero.cta },
+        text("cta", "Gomb felirata", page.hero.cta, 30),
       ],
     },
-    {
-      key: "content",
-      label: "Tartalom",
-      fields: [
-        {
-          key: "sections",
-          label: "Szakaszok",
-          type: "list",
-          itemFields: [
-            { key: "title", label: "Alcím", type: "text", maxLength: 90 },
-            { key: "body", label: "Szöveg", type: "richtext" },
-          ],
-          default: page.sections,
-        },
-      ],
-    },
+    ...page.blocks.map((b) => ({ key: b.key, label: b.label, fields: blockFields(b) })),
     {
       key: "faq",
       label: "Gyakori kérdések",
       fields: [
-        { key: "title", label: "Cím", type: "text", maxLength: 60, default: page.faqTitle },
-        {
-          key: "items",
-          label: "Kérdések",
-          type: "list",
-          itemFields: [
-            { key: "question", label: "Kérdés", type: "text", maxLength: 140 },
-            { key: "answer", label: "Válasz", type: "textarea", maxLength: 900 },
-          ],
-          default: page.faq,
-        },
+        text("title", "Cím", page.faqTitle, 60),
+        list("items", "Kérdések", [it("question", "Kérdés", "text", { maxLength: 140 }), it("answer", "Válasz", "textarea", { maxLength: 900 })], page.faq),
       ],
     },
   ],

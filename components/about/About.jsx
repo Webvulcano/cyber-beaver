@@ -29,7 +29,7 @@ export default async function About() {
   const cms = await getCms();
 
   return (
-    <section id="rolam" className="overflow-hidden bg-petrol-deep text-white">
+    <section id="rolam" className="scroll-mt-16 overflow-hidden bg-petrol-deep text-white">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-20 md:grid-cols-[auto_1fr] md:items-start md:gap-10 md:py-32 lg:gap-16">
         <div className="min-w-0">
           {/* mobilon: kis portré egy sorban a "Rólam" + név sorral, a kiemelt rész alatta teljes szélességben
