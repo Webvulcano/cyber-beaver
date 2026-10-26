@@ -18,6 +18,16 @@ export async function generateMetadata() {
     metadataBase: new URL(SITE_URL),
     title: cms.text("home.seo.title"),
     description: cms.text("home.seo.description"),
+    // Kép: app/opengraph-image.jsx (Next automatikusan hozzáadja); X/Twitter az og:image-et használja.
+    openGraph: {
+      type: "website",
+      locale: "hu_HU",
+      siteName: "Cyber Beaver",
+      url: "/",
+      title: cms.text("home.seo.title"),
+      description: cms.text("home.seo.description"),
+    },
+    twitter: { card: "summary_large_image" },
   };
 }
 
