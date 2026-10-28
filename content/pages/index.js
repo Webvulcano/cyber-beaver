@@ -4,11 +4,9 @@
 // published = false: az oldal közvetlen URL-en elérhető (jóváhagyásra), de noindex, és sehonnan nem linkeljük
 // (főoldal, footer, sitemap, llms.txt, JSON-LD). Jóváhagyás után true → minden link visszajön.
 import { IBF } from "./ibf";
-import { TISAX } from "./tisax";
 
 export const SERVICE_PAGES = [
   { key: "ibf", label: "Információbiztonsági felelős", published: false, content: IBF },
-  { key: "tisax", label: "TISAX felkészítés", icon: "car", published: false, content: TISAX },
 ];
 
 export const servicePageByKey = (key) => SERVICE_PAGES.find((p) => p.key === key);

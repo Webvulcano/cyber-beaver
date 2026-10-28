@@ -122,6 +122,12 @@ export function LegalBar({ rights = "Cyber Beaver Kft. Minden jog fenntartva.", 
             {label}
           </Link>
         ))}
+        <span className="inline-block py-1.5">
+          Készítette:{" "}
+          <a href="https://webvulcano.hu" target="_blank" rel="noopener" className="hover:text-lime">
+            webvulcano.hu
+          </a>
+        </span>
       </span>
     </div>
   );

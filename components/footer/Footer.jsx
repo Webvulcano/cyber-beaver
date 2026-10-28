@@ -20,7 +20,7 @@ const columns = ({ email, phone, linkedin, address }) => [
       { label: "Információbiztonsági felelős", href: publishedPath("ibf") ?? "/#szolgaltatasok" },
       { label: "NIS2 felkészítés", href: "/#szolgaltatasok" },
       { label: "DORA és MNB", href: "/#szolgaltatasok" },
-      { label: "TISAX", href: publishedPath("tisax") ?? "/#szolgaltatasok" },
+      { label: "TISAX", href: "/#szolgaltatasok" },
       { label: "IT audit", href: "/#szolgaltatasok" },
     ],
   },

@@ -8,9 +8,10 @@ import { SERVICE_PAGES, servicePageByKey } from "@/content/pages";
 import { getCms } from "@/lib/cms";
 import { breadcrumbNode, faqNode, orgNode, serviceNode } from "@/lib/schema";
 import { Block, DARK_BLOCKS } from "./blocks";
+import FaqItem from "./FaqItem";
 import SectionNav from "./SectionNav";
 
-// Szolgáltatás-aloldal sablon (IBF, TISAX, …): fejléc → hero (morzsamenü, H1, lead, CTA) → típusos blokkok (blocks.jsx)
+// Szolgáltatás-aloldal sablon (IBF, …): fejléc → hero (morzsamenü, H1, lead, CTA) → típusos blokkok (blocks.jsx)
 // + oldalsó szakasz-navigáció az ablak bal szélén (SectionNav, xl-től) → GYIK (<details>, a válasz mindig a DOM-ban) → kapcsolódó oldalak → Footer (#kapcsolat).
 // Szöveg: CMS <oldal>.* (manifest: servicePage), alapérték + blokk-sorrend: content/pages/<oldal>.js.
 // JSON-LD: Service + FAQPage + Breadcrumb + cég.
@@ -37,7 +38,7 @@ function Chevron() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="size-6 shrink-0 text-petrol transition-transform duration-300 group-open:rotate-180 motion-reduce:transition-none"
+      className="size-6 shrink-0 text-petrol transition-transform duration-300 group-[[open]:not([data-closing])]:rotate-180 motion-reduce:transition-none"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -138,15 +139,19 @@ export default async function ServicePage({ pageKey }) {
               </h2>
               <div className="mt-8 border-t border-petrol/15">
                 {faq.map(({ question, answer }, i) => (
-                  <details key={i} className="group border-b border-petrol/15">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold text-petrol-deep [&::-webkit-details-marker]:hidden">
-                      <span {...cms.attr(k("faq.items"), i, "question")}>{question}</span>
-                      <Chevron />
-                    </summary>
+                  <FaqItem
+                    key={i}
+                    summary={
+                      <>
+                        <span {...cms.attr(k("faq.items"), i, "question")}>{question}</span>
+                        <Chevron />
+                      </>
+                    }
+                  >
                     <p className="pb-6 text-petrol/80" {...cms.attr(k("faq.items"), i, "answer")}>
                       {answer}
                     </p>
-                  </details>
+                  </FaqItem>
                 ))}
               </div>
             </div>
