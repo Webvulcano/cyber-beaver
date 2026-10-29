@@ -6,7 +6,7 @@
 import { IBF } from "./ibf";
 
 export const SERVICE_PAGES = [
-  { key: "ibf", label: "Információbiztonsági felelős", published: false, content: IBF },
+  { key: "ibf", label: "Információbiztonsági felelős", published: true, content: IBF },
 ];
 
 export const servicePageByKey = (key) => SERVICE_PAGES.find((p) => p.key === key);
