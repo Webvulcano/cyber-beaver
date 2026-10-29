@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { publishedPath } from "@/content/pages";
 
 // Közös fejléc (főoldal, szolgáltatás- és jogi oldalak): logó → főoldal, jobbra linkek. Sticky: görgetéskor fent marad
 // (a szakasz-ugrásoknál a scroll-mt-16 hagy neki helyet).
 // contactHref: "#kapcsolat", ha az oldalon van kapcsolat-rész (főoldal, szolgáltatás-oldal), különben "/#kapcsolat".
 // servicesHref: "#szolgaltatasok" a főoldalon, máshol "/#szolgaltatasok".
 export default function SiteHeader({ contactHref = "/#kapcsolat", servicesHref = "/#szolgaltatasok" }) {
+  const ibfPath = publishedPath("ibf"); // IBF-aloldal menüpont, csak ha publikus (content/pages)
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-petrol text-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
@@ -21,6 +23,12 @@ export default function SiteHeader({ contactHref = "/#kapcsolat", servicesHref =
           <a href={servicesHref} className="hidden px-2 py-2 text-white/80 hover:text-lime sm:block">
             Szolgáltatások
           </a>
+          {ibfPath && (
+            <a href={ibfPath} className="px-2 py-2 text-white/80 hover:text-lime">
+              <span className="sm:hidden">IBF</span>
+              <span className="hidden sm:inline">Információbiztonsági felelős</span>
+            </a>
+          )}
           <a href={contactHref} className="rounded-full bg-lime px-4 py-2 text-petrol-deep transition hover:brightness-110">
             Kapcsolat
           </a>
