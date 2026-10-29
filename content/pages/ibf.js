@@ -93,27 +93,6 @@ A kiberbiztonsági törvény alá tartozó szervezeteknek kötelező informáci�
       note: "A felelősség kiszervezéskor is a vezetőnél marad – az én dolgom, hogy megalapozott döntésekre és rendben tartott dokumentációra épüljön.",
     },
     {
-      key: "requirements",
-      type: "duo",
-      nav: "Végzettség",
-      label: "Végzettség",
-      title: "Milyen végzettség kell az információbiztonsági felelőshöz?",
-      intro: "A követelmény attól függ, milyen típusú szervezetről van szó:",
-      items: [
-        {
-          title: "Állami és kijelölt szervezeteknél",
-          points:
-            "Felsőfokú végzettség\nElfogadott szakképzettség – 2027. december 31-ig helyette 5 év szakmai tapasztalat is elég\nÉvi legalább 20 óra továbbképzés\nA hatóság megvizsgálja és nyilvántartásba veszi",
-        },
-        {
-          title: "NIS2-es vállalkozásoknál",
-          points:
-            "Jogi minimum: cselekvőképes, büntetlen előéletű\nA gyakorlatban: kockázatkezelés, szabályzatok és az auditori elvárások ismerete\nEnélkül az IBF csak papíron létezik",
-        },
-      ],
-      note: "A részletes szabályokat a 17/2025. (VII. 24.) EM rendelet tartalmazza.",
-    },
-    {
       key: "compare",
       type: "compare",
       nav: "Belsős vagy külsős?",
@@ -157,6 +136,11 @@ A kiberbiztonsági törvény alá tartozó szervezeteknek kötelező informáci�
       question: "Lehet-e külső szakértő az információbiztonsági felelős?",
       answer:
         "Igen. A törvény szerint a szervezet vezetője az IBF-et a szervezeten belül is kijelölheti, vagy külső személlyel is köthet rá megállapodást. Ilyenkor is meg kell nevezni a feladatot ténylegesen ellátó természetes személyt.",
+    },
+    {
+      question: "Milyen végzettség kell az információbiztonsági felelőshöz?",
+      answer:
+        "A vonatkozó kormányrendelet szerinti tanúsítvány vagy egyetemi végzettség szükséges állami, közigazgatási szervezeteknél. „Piaci” szereplőknél a törvény nem határoz meg végzettséget, de a gyakorlatban javasolt olyan személyre bízni, akinek megvan a kellő szaktudása.",
     },
     {
       question: "Mennyibe kerül egy kiszervezett információbiztonsági felelős?",
