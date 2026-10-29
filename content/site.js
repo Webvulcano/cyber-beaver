@@ -77,8 +77,16 @@ export const SERVICES = {
       title: "NIS2 felkészítés",
       text: "Teljeskörű NIS2 felkészítés a gap elemzéstől a megvalósításig. Számtalan iparágban tevékenykedő ügyféllel dolgoztam már együtt NIS2 megfelelőségen, továbbá végeztem NIS2 auditokat is. A felkészítés során figyelembe veszem az adott cég sajátosságait és az auditori elvárásokat, módszertanokat is.",
     },
-    // TODO: szöveg később (Balázstól)
-    { icon: "audit", title: "NIS2 audit támogatás", text: "" },
+    {
+      icon: "audit",
+      title: "NIS2 audit támogatás",
+      text: "Alvállalkozóként számos NIS2 auditban vettem részt, így jól ismerem az auditori elvárásokat, fókuszpontokat, módszertant. Ezt a tapasztalatot felhasználva tudom segíteni Ügyfeleimet a minél zökkenőmentesebb NIS2 audit lebonyolításában.",
+    },
+    {
+      icon: "shield",
+      title: "OT biztonsági felelős",
+      text: "Információbiztonsági felelős gyártóipari környezetre specializálva. Segítek kialakítani és működtetni OT/SCADA környezetre is érvényes, praktikusan használható, ugyanakkor a NIS2 elvárásainak is megfelelő kontrollkörnyezetet.",
+    },
     {
       icon: "bank",
       title: "DORA és MNB megfelelőség",
