@@ -7,6 +7,7 @@ const FACTS = [
   //{ value: "CISA", label: "Minősített informatikai rendszerellenőr", logo: "/minositesek/cisa.webp" },
   //{ value: "CISM", label: "Minősített információbiztonsági menedzser", logo: "/minositesek/cism.webp" },
   { value: "CIPM", label: "Certified Information Privacy Manager", logo: "/minositesek/cipm.webp", href: "https://iapp.org/certify/cipm" },
+  { value: "Cybersecurity Audit", label: "ISACA Cybersecurity Audit Certificate", logo: "/minositesek/isaca-cybersecurity-audit.webp", href: "https://www.isaca.org/credentialing/cybersecurity-audit-certificate" },
 ];
 
 // Kivágott portré lime keretes körbe vágva (a kerek logó visszhangja). Méret/láthatóság: className.
@@ -58,7 +59,7 @@ export default async function About() {
           >
             {cms.text("home.about.certs_title")}
           </h3>
-          <dl className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-3">
+          <dl className="mt-6 grid max-w-2xl gap-x-8 gap-y-6 sm:grid-cols-2">
             {FACTS.map(({ value, label, logo, href }) => {
               const content = (
                 <>
@@ -67,9 +68,9 @@ export default async function About() {
                 </>
               );
               return (
-                <div key={value} className="flex flex-col-reverse justify-end text-center">
-                  <dt className="mt-1 text-sm text-white/60">{label}</dt>
-                  <dd className="text-xl font-bold text-lime">
+                <div key={value} className="flex flex-col-reverse justify-end text-center sm:row-span-2 sm:grid sm:grid-rows-subgrid sm:gap-y-1">
+                  <dt className="mt-1 text-sm text-white/60 sm:row-start-2 sm:mt-0">{label}</dt>
+                  <dd className="text-xl font-bold text-lime sm:row-start-1">
                     {href ? (
                       <a href={href} target="_blank" rel="noopener noreferrer" className="inline-block transition-opacity hover:opacity-80">
                         {content}

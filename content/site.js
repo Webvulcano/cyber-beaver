@@ -201,5 +201,8 @@ export const COMPANY = {
   founderTitle: "Információbiztonsági tanácsadó, ügyvezető",
   slogan: "Mert csak a legokosabb hód tudja, merre dől a fa.",
   knowsAbout: ["NIS2", "DORA", "MNB ajánlások", "TISAX", "GDPR", "ISO/IEC 27001", "Információbiztonsági kockázatelemzés", "IT audit", "Harmadik felek kockázatkezelése (TPRM)"],
-  credentials: [{ name: "CIPM — Certified Information Privacy Manager", issuer: "IAPP", url: "https://iapp.org/certify/cipm" }],
+  credentials: [
+    { name: "CIPM — Certified Information Privacy Manager", issuer: "IAPP", url: "https://iapp.org/certify/cipm" },
+    { name: "Cybersecurity Audit Certificate", issuer: "ISACA", url: "https://www.isaca.org/credentialing/cybersecurity-audit-certificate" },
+  ],
 };
