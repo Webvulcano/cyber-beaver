@@ -11,14 +11,9 @@ const BASE = "#22282a";
 const ACCENT = "#6cc4a1";
 const RISK = "#ff5c50";
 
-// Figtree a Google Fontsból, csak a szükséges karakterekkel (ékezetek miatt kell saját font).
-async function loadFont(weight, text) {
-  const url = `https://fonts.googleapis.com/css2?family=Figtree:wght@${weight}&text=${encodeURIComponent(text)}`;
-  const css = await (await fetch(url)).text();
-  const src = css.match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/);
-  if (!src) throw new Error("Figtree font betöltése sikertelen");
-  return (await fetch(src[1])).arrayBuffer();
-}
+// Figtree a repóból (ékezetek miatt kell saját font), hogy a build ne függjön a Google Fontstól.
+const loadBold = () => readFile(new URL("./fonts/Figtree-700.ttf", import.meta.url));
+const loadSemibold = () => readFile(new URL("./fonts/Figtree-600.ttf", import.meta.url));
 
 // Determinisztikus pontrács: piros klaszterek, accent sávok ("kígyó" nyoma), középen elhalványul.
 const GAP = 30;
@@ -73,8 +68,7 @@ export async function renderOg({ company, highlight = "", title, subtitle }) {
   const logo = await readFile(join(process.cwd(), "public/logo-mark-white.png"));
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
 
-  const chars = company + highlight + title + subtitle;
-  const [bold, semibold] = await Promise.all([loadFont(700, chars), loadFont(600, chars)]);
+  const [bold, semibold] = await Promise.all([loadBold(), loadSemibold()]);
 
   return new ImageResponse(
     (
