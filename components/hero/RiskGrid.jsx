@@ -75,6 +75,9 @@ export default function RiskGrid() {
       const offX = (w - (cols - 1) * gap) / 2;
       const offY = (h - (rows - 1) * gap) / 2;
       cells = [];
+      snakes = [];
+      // Rejtett / 0 méretű szekció: nincs rács, a loop újraépíti, amint van mérete.
+      if (!cols || !rows) return;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           cells.push({ c, r, x: offX + c * gap, y: offY + r * gap, risk: 0, target: 0, ok: 0, healedAt: 0 });
@@ -242,6 +245,7 @@ export default function RiskGrid() {
     }
 
     function loop(now) {
+      if (!cells.length) build();
       step(now);
       draw();
       if (visible) raf = requestAnimationFrame(loop);
